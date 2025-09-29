@@ -19,3 +19,8 @@ async function weatherApi() {
     }
 }
 
+export default {weatherApi};
+
+require: api.js
+    type = scriptEs6
+    name = api
