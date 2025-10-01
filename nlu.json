@@ -20,7 +20,25 @@
       "answerValidationThreshold" : 0.8
     }
   },
-  "intents" : [ ],
+  "intents" : [ {
+    "path" : "/Погода сегодня",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Какая погода сегодня в городе"
+    }, {
+      "text" : "Сколько градусов в городе"
+    }, {
+      "text" : "Погода сегодня в "
+    }, {
+      "text" : "Какая погода сегодня будет в городе"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "priority" : 0
+  } ],
   "entities" : [ ],
   "enabledSystemEntities" : [ "duckling.number", "duckling.time", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
   "spellerDictionary" : [ ],

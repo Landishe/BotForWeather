@@ -1,12 +1,18 @@
 
-function weatherApi($session) {
-    $temp.responce = $http.get('https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=${current}',{
+
+function weatherApi(cityData) {
+   
+    var responce = $http.get('https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=${current}&daily=${daily}',{
         query: {
-            lat: $parseTree._City.lat,
-            lon: $parseTree._City.lon,
-            current: 'temperature_2m',
-            }    
+            lat: cityData.lat,
+            lon: cityData.lon,
+            current: cityData.current,
+            daily: cityData.daily
+            }
         });
+    return responce
+     
 }
+
 
 
