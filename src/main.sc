@@ -3,6 +3,9 @@ require: api.js
 
 require: city/city.sc
     module = sys.zb-common
+    
+require: dateTime/moment.min.js
+    module = sys.zb-common
 
 theme: /
 
@@ -11,43 +14,74 @@ theme: /
         script:
             $session = {}
             $temp = {}
-        a: Добрый день! Я могу подсказать прогноз погоды а также подсказать погоду на  всю неделю и если хотите могу подсказать какую одежду надеть сегодня. 
+        a: Добрый день! Я могу подсказать прогноз погоды а также подсказать погоду на всю неделю. В РАЗРАБОТКЕ "если хотите могу подсказать какую одежду надеть сегодня. "
+        go!: ./whereAreYou
         
-        state: weatherOnDay
+        state: whereAreYou
+            a: Уточните в каком городе посмотреть погоду?
             
-            q!: *[какая] сколько [сейчас] градус* [в] $City *
+        state: findCity
+            q!: (в|нахожусь|буду|живу|пребываю) [$oneWord] $City * 
             script:
-                var cityData = {
+                
+                $session.cityData = {
+                    name: $parseTree._City.name,
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
                     current: 'temperature_2m',
                     daily: "temperature_2m_max",
+                    date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
                
-                $temp.weatherResult = weatherApi(cityData);
-               
-                log($temp.weatherResult);
+            go!: ./question
+        
+            state: question
+                a: Вы хотите узнать погоду на сегодня или на неделю?
+        
+        state: ask
+            q!: (хочу|какая|сколько|на).*(сейчас|сегодня)
+            go!: ../weatherOnDay
+            
+        state: ask2
+            q!: (хочу|какая|сколько|узнать|на)*(этой|будет|ожидается|недел*)
+            go!: ../weatherOnWeek
+            
+        state: weatherOnDay
+            script:
+                $temp.weatherResult = weatherApi($session.cityData);
+                log($temp.weatherResult)
             if: $temp.weatherResult.isOk
-                a: Сейчас в {{$parseTree._City.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается максимальная температура {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}
-                
+                a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
         state: weatherOnWeek
-            q!:* какая погода [будет] на этой неделе* [в] $City
             script:
-                var cityData = {
-                    lat: $parseTree._City.lat,
-                    lon: $parseTree._City.lon,
-                    current: 'temperature_2m',
-                    daily: "temperature_2m_max",
-                    };
-                $temp.weatherResultWeek = weatherApi(cityData);
-               
-                log($temp.weatherResultWeek);
-            if: $temp.weatherResultWeek.isOk
-                a: На этой неделе в {{$parseTree._City.name}} Ожидается {{$temp.weatherResultWeek.data.daily.temperature_2m_max}}
+                $temp.weatherResultWeek = weatherApi($session.cityData);
+                var weatherWeek = $temp.weatherResultWeek.data.daily.temperature_2m_max;
+                    
                 
+                var days = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт' ,'сб']
+                var day = $temp.weatherResultWeek.data.daily.time;
+                
+                var firstDay = day[0];
+                var jsDate = new Date(firstDay);
+                var dayOfWeek = jsDate.getDay();
+                
+                var forecast = []
+                for (var i = 0; i < weatherWeek.length; i++){
+                    var currentDate = new Date(day[i]);
+                    var dayName = days[currentDate.getDay()];
+                    var temperature = Math.round(weatherWeek[i]);
+                    forecast.push(dayName + ": " + temperature + "°C");
+                }
+                
+                log(forecast.join("\n"))
+                $temp.forecastText = forecast.join("\n");
+                
+            if: $temp.weatherResultWeek.isOk
+                
+                a: На этой неделе в городе {{$session.cityData.name}} ожидается на этой неделе:\n{{$temp.forecastText}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
