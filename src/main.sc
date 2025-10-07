@@ -32,7 +32,7 @@ theme: /
                     daily: "temperature_2m_max",
                     date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
-               
+                log($session.cityData);
             go!: ./question
         
             state: question
