@@ -14,7 +14,7 @@ theme: /
         script:
             $session = {}
             $temp = {}
-        a: ** От разработчика:Бот находиться в стадии разработки. На данный момент релизован поиск города, ответ на погоду на сегодня и на недел. Что одеть в процессе разработки. На запрос о городе лучше отвачать "в Москва". Город в Именительном падеже" **
+        a: ** От разработчика:Бот находиться в стадии разработки. На данный момент релизован поиск города, ответ на погоду на сегодня и на недел. Что одеть в процессе разработки. **
             \n Добрый день! Я могу подсказать прогноз погоды а также подсказать погоду на всю неделю.
         go!: ./whereAreYou
         
@@ -22,18 +22,17 @@ theme: /
             a: Уточните в каком городе посмотреть погоду?
             
         state: findCity
-            q!: (в|нахожусь|буду|живу|пребываю) [$oneWord] $City * 
+            q!: $City * 
             script:
-                
                 $session.cityData = {
-                    name: $parseTree._City.name,
+                    name: $caila.inflect($parseTree._City.name, ["loct"]),
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
                     current: 'temperature_2m',
                     daily: "temperature_2m_max",
                     date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
-                log($session.cityData);
+                $session.clothes=['пальто', 'шапка', 'дождевик', 'теплая куртка', 'ветровка', 'перчатки', 'солнечные очки', 'панаму', 'шорты', 'майка'];
             go!: ./question
         
             state: question
@@ -52,7 +51,7 @@ theme: /
                 $temp.weatherResult = weatherApi($session.cityData);
                 log($temp.weatherResult)
             if: $temp.weatherResult.isOk
-                a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
+                a: Сейчас в городе {{$caila.inflect($session.cityData.name, ["loct"])}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
