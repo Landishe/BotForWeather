@@ -25,7 +25,7 @@ theme: /
             q!: $City * 
             script:
                 $session.cityData = {
-                    name: $caila.inflect($parseTree._City.name, ["loct"]),
+                    name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
                     current: 'temperature_2m',
@@ -51,7 +51,7 @@ theme: /
                 $temp.weatherResult = weatherApi($session.cityData);
                 log($temp.weatherResult)
             if: $temp.weatherResult.isOk
-                a: Сейчас в городе {{$caila.inflect($session.cityData.name, ["loct"])}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
+                a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
