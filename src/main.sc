@@ -25,7 +25,7 @@ theme: /
             a: Уточните в каком городе посмотреть погоду?
             
         state: findCity
-            q!: $City * 
+            q!: [$oneWord] $City * 
             script:
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
