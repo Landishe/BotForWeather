@@ -43,15 +43,15 @@ function getClothingRecomendation(weatherResult){
     } else if (weatherResult.data.current.temperature_2m >= 15) {
         recommendation.push('кофту или ветровку')
     } else if (weatherResult.data.current.temperature_2m >= 5){
-        recommendation.push('пальто', 'куртку')
-    } else ('теплое пальто', 'теплую куртку')
+        recommendation.push("пальто или куртку", "кофту"')
+    } else ("теплое пальто", "шапку", "перчатки")
 
     if (weatherResult.data.current.weather_code == 0 || weatherResult.data.current.weather_code == 1){
         recommendation.push("солнечные очки")
     } else if (weatherResult.data.current.weather_code >= 57 || weatherResult.data.current.weather_code <= 67){
         recommendation.push('зонт иди дождевик')
     } else if (weatherResult.data.current.weather_code >= 71 || weatherResult.data.current.weather_code <= 86){
-        recommendation.push("зонт", 'теплая обувь')
+        recommendation.push('зонт и теплую обувь')
     } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
         recommendation.push('Не выходить на улицу пока идет гроза')
     }
