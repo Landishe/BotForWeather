@@ -63,7 +63,7 @@ theme: /
             if: $temp.weatherResult.isOk
                 a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
                 a: Сегодня в городе обещают {{$temp.tempData}} и {{$temp.WeatherCode}}.
-                a: Рекомендуем надеть {{$temp.clothesRecomendation}}.
+                a: Рекомендуем надеть {{$temp.clothesRecomendation.join(', ')}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
