@@ -49,7 +49,7 @@ function getClothingRecomendation(weatherResult){
     if (weatherResult.data.current.weather_code == 0 || weatherResult.data.current.weather_code == 1){
         recommendation.push("солнечные очки")
     } else if (weatherResult.data.current.weather_code >= 57 || weatherResult.data.current.weather_code <= 67){
-        recommendation.push('зонт иди дождевик')
+        recommendation.push('зонт или дождевик')
     } else if (weatherResult.data.current.weather_code >= 71 || weatherResult.data.current.weather_code <= 86){
         recommendation.push('зонт и теплую обувь')
     } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
