@@ -1,5 +1,8 @@
 require: api.js
     name = api
+    
+require: function.js
+    name = getTemp
 
 require: city/city.sc
     module = sys.zb-common
@@ -33,25 +36,34 @@ theme: /
                     date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
                 $session.clothes=['пальто', 'шапка', 'дождевик', 'теплая куртка', 'ветровка', 'перчатки', 'солнечные очки', 'панаму', 'шорты', 'майка'];
+                
             go!: ./question
         
             state: question
                 a: Вы хотите узнать погоду на сегодня или на неделю?
         
         state: ask
-            q!: (хочу|какая|сколько|на).*(сейчас|сегодня)
+            q!: (сейчас|сегодня)
             go!: ../weatherOnDay
             
         state: ask2
-            q!: (хочу|какая|сколько|узнать|на)*(этой|будет|ожидается|недел*)
+            q!: (этой|будет|ожидается|недел*)
             go!: ../weatherOnWeek
             
         state: weatherOnDay
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
-                log($temp.weatherResult)
+                log($temp.weatherResult);
+                $temp.tempData = getTemperature($temp.weatherResult);
+                log($temp.tempData);
+                $temp.WeatherCode = getWeatherCode($temp.weatherResult);
+                log($temp.WeatherCode);
+                $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
+                log($temp.clothesRecomendation)
             if: $temp.weatherResult.isOk
                 a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
+                a: Сегодня в городе обещают {{$temp.tempData}} и {{$temp.WeatherCode}}.
+                a: Рекомендуем надеть {{$temp.clothesRecomendation}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
