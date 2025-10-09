@@ -43,7 +43,7 @@ function getClothingRecomendation(weatherResult){
     } else if (weatherResult.data.current.temperature_2m >= 15) {
         recommendation.push('кофту или ветровку')
     } else if (weatherResult.data.current.temperature_2m >= 5){
-        recommendation.push("пальто или куртку", "кофту"')
+        recommendation.push("пальто или куртку", "кофту")
     } else ("теплое пальто", "шапку", "перчатки")
 
     if (weatherResult.data.current.weather_code == 0 || weatherResult.data.current.weather_code == 1){
