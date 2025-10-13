@@ -39,7 +39,7 @@ function getWeatherCode(weatherResult){
 function getClothingRecomendation(weatherResult){
     var recommendation = []
     if (weatherResult.data.current.temperature_2m >= 25) {
-        recommendation.push('футболку', 'шорты', 'солнечные очки')
+        recommendation.push('футболку👕', 'шорты', 'солнечные очки🕶')
     } else if (weatherResult.data.current.temperature_2m >= 15) {
         recommendation.push('кофту или ветровку')
     } else if (weatherResult.data.current.temperature_2m >= 5){
@@ -55,8 +55,91 @@ function getClothingRecomendation(weatherResult){
     } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
         recommendation.push('Не выходить на улицу пока идет гроза')
     }
-    
     return recommendation
-    
 }
 
+function getWeeklyAverage(weatherResult) {
+    var sum = weatherResult.data.daily.temperature_2m_max.reduce(function(a, b){
+        return a + b;
+    }, 0);
+    return (sum / weatherResult.data.daily.temperature_2m_max.length).toFixed(1);
+}
+
+function getWeeklyGeneralAdvice(weatherResult){
+    var avgTemp = getWeeklyAverage(weatherResult)
+    
+    if (avgTemp >= 20) {
+        return {
+            mood: "тепло 🌤️",
+            advice: "На этой неделе будет тепло - отличное время для прогулок на свежем воздухе",
+            emoji: "😊"
+        };
+    } else if (avgTemp >= 15) {
+        return {
+            mood: "комфортно 🌼", 
+            advice: "На неделе комфортная температура - можно планировать активность на улице",
+            emoji: "👍"
+        };
+    } else if (avgTemp >= 10) {
+        return {
+            mood: "прохладно 🍂",
+            advice: "На неделе будет прохладно - если будете гулять, возьмите кофту или ветровку",
+            emoji: "🧥"
+        };
+    } else if (avgTemp >= 5) {
+        return {
+            mood: "холодно ❄️",
+            advice: "На неделе ожидается холодно - для прогулок потребуется теплая одежда",
+            emoji: "🧤"
+        };
+    } else if (avgTemp >= 0) {
+        return {
+            mood: "очень холодно 🥶",
+            advice: "На неделе будет очень холодно - одевайтесь теплее, если планируете выходить",
+            emoji: "🧣"
+        };
+    } else {
+        return {
+            mood: "морозно ⛄",
+            advice: "На неделе морозно - лучше оставайтесь в тепле, ограничьте время на улице",
+            emoji: "🏠"
+        };
+    }
+}
+
+function getTemperatureRange(weatherResult) {
+    var temperatures = weatherResult.data.daily.temperature_2m_max;
+    log(temperatures)
+    
+    var min = temperatures[0];
+    for (var i = 1; i < temperatures.length; i++) {
+        if (temperatures[i] < min) {
+            min = temperatures[i];
+        }
+    }
+    
+    var max = temperatures[0];
+    for (var i = 1; i < temperatures.length; i++) {
+        if (temperatures[i] > max) {
+            max = temperatures[i];
+        }
+    }
+    
+    
+    var range = max - min;
+    
+    return {
+        min: min,
+        max: max,
+        range: range.toFixed(1),
+        hasBigChanges: range > 10,
+    };
+}
+function getRangeAdvice(weatherResult) {
+    var tempRange = getTemperatureRange(weatherResult);
+    if(tempRange.hasBigChanges){
+        return "⚠️ Обратите внимание: на неделе большой перепад температур (" + tempRange.range + "°C) - готовьте разную одежду";
+    } else {
+        return "📊 Температура будет стабильной в течение недели";
+    }
+}

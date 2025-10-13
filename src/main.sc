@@ -17,8 +17,8 @@ theme: /
         script:
             $session = {}
             $temp = {}
-        a: ** От разработчика:Бот находиться в стадии разработки могут быть ошибки. На данный момент релизован поиск города, также бот разбирает такие наименования СПБ, МСК Екб и тп. **
-            \n Добрый день! Я могу подсказать прогноз погоды а также подсказать погоду на всю неделю.
+        a: ** От разработчика:Бот находится в стадии разработки могут быть ошибки. На данный момент релизован поиск города, также бот разбирает такие наименования СПБ, МСК Екб и тп. **
+            \n Добрый день! Я могу подсказать прогноз погоды сегодня, а также на всю неделю.
         go!: ./whereAreYou
         
         state: whereAreYou
@@ -35,6 +35,7 @@ theme: /
                     daily: "temperature_2m_max",
                     date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
+                
             go!: ./question
         
             state: question
@@ -52,12 +53,13 @@ theme: /
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
                 log($temp.weatherResult);
+                
                 $temp.tempData = getTemperature($temp.weatherResult);
-                log($temp.tempData);
+                
                 $temp.WeatherCode = getWeatherCode($temp.weatherResult);
-                log($temp.WeatherCode);
+                
                 $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
-                log($temp.clothesRecomendation)
+                
             if: $temp.weatherResult.isOk
                 a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
                 a: Сегодня в городе обещают {{$temp.tempData}} и {{$temp.WeatherCode}}.
@@ -68,12 +70,15 @@ theme: /
         state: weatherOnWeek
             script:
                 $temp.weatherResultWeek = weatherApi($session.cityData);
-                var weatherWeek = $temp.weatherResultWeek.data.daily.temperature_2m_max;
-                    
+                log($temp.weatherResultWeek);
+                $temp.getWeeklyAverage = getWeeklyAverage($temp.weatherResultWeek);
+                $temp.getWeeklyGeneralAdvice = getWeeklyGeneralAdvice($temp.weatherResultWeek);
+                $temp.getTemperatureRange = getTemperatureRange($temp.weatherResultWeek);
+                $temp.getRangeAdvice=getRangeAdvice($temp.weatherResultWeek);
                 
+                var weatherWeek = $temp.weatherResultWeek.data.daily.temperature_2m_max;
                 var days = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт' ,'сб']
                 var day = $temp.weatherResultWeek.data.daily.time;
-                
                 var firstDay = day[0];
                 var jsDate = new Date(firstDay);
                 var dayOfWeek = jsDate.getDay();
@@ -85,13 +90,15 @@ theme: /
                     var temperature = Math.round(weatherWeek[i]);
                     forecast.push(dayName + ": " + temperature + "°C");
                 }
-                
-                log(forecast.join("\n"))
                 $temp.forecastText = forecast.join("\n");
                 
             if: $temp.weatherResultWeek.isOk
-                
-                a: На этой неделе в городе {{$session.cityData.name}} ожидается на этой неделе:\n{{$temp.forecastText}}.
+                a: На этой неделе в городе {{$session.cityData.name}} ожидается:\n{{$temp.forecastText}}
+                a: Диапозон от {{$temp.getTemperatureRange.min + "°C"}} до {{$temp.getTemperatureRange.max + "°C"}}
+                   Средняя температура: {{$temp.getWeeklyAverage + "°C"}}
+                   {{$temp.getRangeAdvice}}
+                a: Настроение недели: {{$temp.getWeeklyGeneralAdvice.mood}} \n
+                   {{$temp.getWeeklyGeneralAdvice.advice}} {{$temp.getWeeklyGeneralAdvice.emoji}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
