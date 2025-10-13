@@ -35,8 +35,6 @@ theme: /
                     daily: "temperature_2m_max",
                     date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
                     };
-                $session.clothes=['пальто', 'шапка', 'дождевик', 'теплая куртка', 'ветровка', 'перчатки', 'солнечные очки', 'панаму', 'шорты', 'майка'];
-                
             go!: ./question
         
             state: question
