@@ -6,7 +6,7 @@ function weatherApi(cityData) {
         query: {
             lat: cityData.lat,
             lon: cityData.lon,
-            current: cityData.current + ',weather_code',
+            current: cityData.current + ',weather_code' + ',wind_speed_10m',
             daily: cityData.daily,
             
             }

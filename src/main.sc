@@ -53,16 +53,19 @@ theme: /
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
                 log($temp.weatherResult);
-                
                 $temp.tempData = getTemperature($temp.weatherResult);
-                
                 $temp.WeatherCode = getWeatherCode($temp.weatherResult);
-                
                 $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
                 
+                function windSpeed (weatherResult) {
+                    
+                    return ($temp.weatherResult.data.current.wind_speed_10m / 3.6).toFixed(1)
+                }
+                $temp.windSpeed = windSpeed($temp.weatherResult)
             if: $temp.weatherResult.isOk
                 a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
-                a: Сегодня в городе обещают {{$temp.tempData}} и {{$temp.WeatherCode}}.
+                a: Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}}
+                   Сила ветра {{$temp.windSpeed + 'м/с'}}.
                 a: Рекомендуем надеть {{$temp.clothesRecomendation.join(', ')}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
@@ -70,7 +73,6 @@ theme: /
         state: weatherOnWeek
             script:
                 $temp.weatherResultWeek = weatherApi($session.cityData);
-                log($temp.weatherResultWeek);
                 $temp.getWeeklyAverage = getWeeklyAverage($temp.weatherResultWeek);
                 $temp.getWeeklyGeneralAdvice = getWeeklyGeneralAdvice($temp.weatherResultWeek);
                 $temp.getTemperatureRange = getTemperatureRange($temp.weatherResultWeek);
