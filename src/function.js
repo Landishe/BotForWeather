@@ -39,12 +39,12 @@ function getWeatherCode(weatherResult){
 function getClothingRecomendation(weatherResult){
     var recommendation = []
     if (weatherResult.data.current.temperature_2m >= 25) {
-        recommendation.push('футболку👕', 'шорты', 'солнечные очки🕶')
+        recommendation.push('футболка👕', 'шорты', 'солнечные очки🕶')
     } else if (weatherResult.data.current.temperature_2m >= 15) {
         recommendation.push('кофту или ветровку')
     } else if (weatherResult.data.current.temperature_2m >= 5){
-        recommendation.push("пальто или куртку", "кофту")
-    } else ("теплое пальто", "шапку", "перчатки")
+        recommendation.push("пальто или куртка", "кофта")
+    } else ("теплое пальто", "шапка", "перчатки")
 
     if (weatherResult.data.current.weather_code == 0 || weatherResult.data.current.weather_code == 1){
         recommendation.push("солнечные очки")
