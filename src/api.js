@@ -7,7 +7,7 @@ function weatherApi(cityData) {
             lat: cityData.lat,
             lon: cityData.lon,
             current: cityData.current + ',weather_code' + ',wind_speed_10m',
-            daily: cityData.daily,
+            daily: cityData.daily + ',weather_code',
             
             }
         });

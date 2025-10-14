@@ -42,14 +42,18 @@ theme: /
                 a: Вы хотите узнать погоду на сегодня или на неделю?
         
         state: ask
-            q!: $regex<(?:на )?(сейчас|сегодня)>
+            q!: $regex<(?:на )?сейчас>
+            go!: ../weatherCurrent
+        
+        state: ask1    
+            q!:$regex<(?:на)?сегодня>
             go!: ../weatherOnDay
             
         state: ask2
             q!: (этой|будет|ожидается|недел*)
             go!: ../weatherOnWeek
             
-        state: weatherOnDay
+        state: weatherCurrent
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
                 log($temp.weatherResult);
@@ -69,6 +73,26 @@ theme: /
                 a: Вот что может пригодиться сегодня: {{$temp.clothesRecomendation.join(', ')}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
+        
+        state: weatherOnDay
+            script:
+                $temp.weatherResult = weatherApi($session.cityData);
+                $temp.tempData = getTemperature($temp.weatherResult);
+                $temp.getWeatherCodeToday = getWeatherCodeToday($temp.weatherResult);
+                $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
+                log($temp.getWeatherCodeToday)
+                function windSpeed (weatherResult) {
+                    return ($temp.weatherResult.data.current.wind_speed_10m / 3.6).toFixed(1)
+                }
+                
+                $temp.windSpeed = windSpeed($temp.weatherResult)
+            if: $temp.weatherResult.isOk
+                a: Сегодня в городе ожидается {{$session.cityData.name}} {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
+                  {{$temp.tempData}} и {{$temp.getWeatherCodeToday[0]}}
+                   Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                a: Вот что может пригодиться сегодня: {{$temp.clothesRecomendation.join(', ')}}.
+            else:
+                a: У меня не получилось узнать погоду. Попробуйте ещё раз.  
         
         state: weatherOnWeek
             script:
