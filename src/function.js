@@ -37,7 +37,6 @@ function getWeatherCode(weatherResult){
 }
 
 function getWeatherCodeToday(weatherResult){
-    log(weatherResult.data.daily.weather_code);
     switch(weatherResult.data.daily.weather_code[0]) {
         case 0: return 'ясно☀️';
         case 1: return 'преимущественно ясно🌤';

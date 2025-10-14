@@ -17,8 +17,8 @@ theme: /
         script:
             $session = {}
             $temp = {}
-        a: ** От разработчика: Бот находится в стадии разработки могут быть ошибки. На данный момент релизован поиск города, также бот разбирает такие наименования СПБ, МСК Екб и тп. **
-            \n Добрый день! Я могу подсказать прогноз погоды сегодня, а также на всю неделю.
+        a: ** От разработчика: Бот находится в стадии разработки и могут быть ошибки. На данный момент релизована проверка погоды Сейчас, Сегодня или на Неделю. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. **
+            \n Добрый день! Я могу подсказать прогноз погоды на сейчас, сегодня, а также на всю неделю.
         go!: ./whereAreYou
         
         state: whereAreYou
@@ -80,16 +80,17 @@ theme: /
                 $temp.tempData = getTemperature($temp.weatherResult);
                 $temp.getWeatherCodeToday = getWeatherCodeToday($temp.weatherResult);
                 $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
-                log($temp.getWeatherCodeToday)
+                log($temp.weatherResult)
+                
                 function windSpeed (weatherResult) {
-                    return ($temp.weatherResult.data.current.wind_speed_10m / 3.6).toFixed(1)
+                    return ($temp.weatherResult.data.daily.wind_speed_10m_max[0] / 3.6).toFixed(1)
                 }
                 
                 $temp.windSpeed = windSpeed($temp.weatherResult)
             if: $temp.weatherResult.isOk
                 a: Сегодня в городе ожидается {{$session.cityData.name}} {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
-                  {{$temp.tempData}} и {{$temp.getWeatherCodeToday[0]}}
-                   Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                  {{$temp.tempData}} и {{$temp.getWeatherCodeToday}}, сила ветра {{$temp.windSpeed + 'м/с'}}.
+                   
                 a: Вот что может пригодиться сегодня: {{$temp.clothesRecomendation.join(', ')}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.  
