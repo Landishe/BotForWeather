@@ -42,15 +42,15 @@ theme: /
                 a: Вы хотите узнать погоду на сегодня или на неделю?
         
         state: ask
-            q!: $regexp_i<(?:на )?сейчас>
+            q!: $regexp_i<(?:на\s+)?(сейчас)>
             go!: ../weatherCurrent
         
         state: ask1    
-            q!: $regexp_i<(?:на )?сегодня>
+            q!: $regexp_i<(?:на\s+)?(сегодня)>
             go!: ../weatherOnDay
             
         state: ask2
-            q!: (недел*) 
+            q!: $regexp_i<(?:на\s+)?(недел*)>
             go!: ../weatherOnWeek
             
         state: weatherCurrent
