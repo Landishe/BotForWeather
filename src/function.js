@@ -16,6 +16,28 @@ function getTemperature(weatherResult){
     }
 }
 
+function getClothesWeatherOnDay(weatherResult){
+    var recomendationClothes = [];
+    if (weatherResult.data.daily.temperature_2m_max >= 25){
+        recomendationClothes.push('• 😎 Солнечные очки обязательны')
+    } else if (weatherResult.data.current.temperature_2m >= 15) {
+        recomendationClothes.push('• 🧥 Комфортная одежда могут пригодиться')
+    } else if (weatherResult.data.current.temperature_2m >= 5){
+        recomendationClothes.push("• 🍂 Дополнительный слой теплой одежды не помешает")
+    } else ("• 🧤 Не забудьте перчатки и шарф")
+
+    if (weatherResult.data.daily.weather_code == 0 || weatherResult.data.daily.weather_code == 1){
+        recomendationClothes.push("• ☔ Возьмите зонт или дождевики")
+    } else if (weatherResult.data.current.weather_code >= 57 || weatherResult.data.current.weather_code <= 67){
+        recomendationClothes.push('• ☔ Возьмите зонт или дождевик')
+    } else if (weatherResult.data.current.weather_code >= 71 || weatherResult.data.current.weather_code <= 86){
+        recomendationClothes.push('• 👢 Непромокаемая обувь будет кстати')
+    } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
+        recomendationClothes.push('• ⛈️ Избегайте открытых мест во время грозыза')
+    }
+    return recomendationClothes.join('\n')
+}
+
 function getWeatherCode(weatherResult){
     switch(weatherResult.data.current.weather_code) {
         case 0: return 'ясно☀️';

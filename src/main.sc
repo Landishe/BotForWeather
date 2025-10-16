@@ -70,7 +70,7 @@ theme: /
                 a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
                 a: Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}}
                    Сила ветра {{$temp.windSpeed + 'м/с'}}.
-                a: Вот что может пригодиться сегодня: {{$temp.clothesRecomendation.join(', ')}}.
+                a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}.
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
@@ -79,7 +79,7 @@ theme: /
                 $temp.weatherResult = weatherApi($session.cityData);
                 $temp.tempData = getTemperature($temp.weatherResult);
                 $temp.getWeatherCodeToday = getWeatherCodeToday($temp.weatherResult);
-                $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
+                $temp.clothesRecomendation = getClothesWeatherOnDay($temp.weatherResult);
                 log($temp.weatherResult)
                 
                 function windSpeed (weatherResult) {
@@ -91,7 +91,7 @@ theme: /
                 a: Сегодня в городе ожидается {{$session.cityData.name}} {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
                   {{$temp.tempData}} и {{$temp.getWeatherCodeToday}}, сила ветра {{$temp.windSpeed + 'м/с'}}.
                    
-                a: Вот что может пригодиться сегодня: {{$temp.clothesRecomendation.join(', ')}}.
+                a: Рекомендация:\n {{$temp.clothesRecomendation}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.  
         
