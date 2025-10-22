@@ -33,9 +33,9 @@ theme: /
                     lon: $parseTree._City.lon,
                     current: 'temperature_2m',
                     daily: "temperature_2m_max",
-                    date: $jsapi.dateForZone($parseTree._City.timezone, 'yyyy-MM-dd'),
+                    date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
-                
+                log($session.cityData);
             go!: ./question
         
             state: question
@@ -56,21 +56,34 @@ theme: /
         state: weatherCurrent
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
-                log($temp.weatherResult);
+               
                 $temp.tempData = getTemperature($temp.weatherResult);
                 $temp.WeatherCode = getWeatherCode($temp.weatherResult);
                 $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
                 
                 function windSpeed (weatherResult) {
-                    
                     return ($temp.weatherResult.data.current.wind_speed_10m / 3.6).toFixed(1)
                 }
                 $temp.windSpeed = windSpeed($temp.weatherResult)
+                
+                function convertToLocalTime(weatherResult){
+                    var timeSunsetSunshine = []
+                    timeSunsetSunshine.push($temp.weatherResult.data.daily.sunrise[0].split('T')[1])
+                    timeSunsetSunshine.push($temp.weatherResult.data.daily.sunset[0].split('T')[1])
+                    return timeSunsetSunshine
+                }
+                $temp.timeSunset = convertToLocalTime($temp.weatherResult);
+                log($temp.timeSunset[1])
+                log($temp.weatherResult)
+                
+            
             if: $temp.weatherResult.isOk
-                a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
-                a: Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}}
-                   Сила ветра {{$temp.windSpeed + 'м/с'}}.
-                a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}.
+                if: ($session.cityData.date >= $temp.timeSunset[1]) && ($session.cityData.date <= $temp.timeSunset[0])
+                    a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Ощущается как: {{$temp.tempData}}"
+                    a: труляляляля
+                else:
+                    a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                    a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
@@ -85,12 +98,11 @@ theme: /
                 function windSpeed (weatherResult) {
                     return ($temp.weatherResult.data.daily.wind_speed_10m_max[0] / 3.6).toFixed(1)
                 }
+                $temp.windSpeed = windSpeed($temp.weatherResult);
                 
-                $temp.windSpeed = windSpeed($temp.weatherResult)
             if: $temp.weatherResult.isOk
                 a: Сегодня в городе ожидается {{$session.cityData.name}} {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
-                  {{$temp.tempData}} и {{$temp.getWeatherCodeToday}}, сила ветра {{$temp.windSpeed + 'м/с'}}.
-                   
+                   {{$temp.tempData}} и {{$temp.getWeatherCodeToday}}, сила ветра {{$temp.windSpeed + 'м/с'}}.
                 a: Рекомендация:\n {{$temp.clothesRecomendation}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.  
