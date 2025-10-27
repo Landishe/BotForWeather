@@ -56,7 +56,6 @@ theme: /
         state: weatherCurrent
             script:
                 $temp.weatherResult = weatherApi($session.cityData);
-               
                 $temp.tempData = getTemperature($temp.weatherResult);
                 $temp.WeatherCode = getWeatherCode($temp.weatherResult);
                 $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
@@ -73,14 +72,14 @@ theme: /
                     return timeSunsetSunshine
                 }
                 $temp.timeSunset = convertToLocalTime($temp.weatherResult);
-                log($temp.timeSunset[1])
+                log($temp.timeSunset)
                 log($temp.weatherResult)
                 
             
             if: $temp.weatherResult.isOk
-                if: ($session.cityData.date >= $temp.timeSunset[1]) && ($session.cityData.date <= $temp.timeSunset[0])
+                if: (($session.cityData.date <= $temp.timeSunset[0]) || ($session.cityData.date >= $temp.timeSunset[1]))
                     a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Ощущается как: {{$temp.tempData}}"
-                    a: труляляляля
+                    
                 else:
                     a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
                     a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
