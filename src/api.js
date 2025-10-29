@@ -5,9 +5,8 @@ function weatherApi(cityData) {
             lat: cityData.lat,
             lon: cityData.lon,
             timezone: 'auto',
-            current: cityData.current + ',weather_code' + ',wind_speed_10m',
-            daily: cityData.daily + ',weather_code' + ',wind_speed_10m_max' + ',sunset' + ',sunrise',
-            
+            current: 'temperature_2m' + ',weather_code' + ',wind_speed_10m',
+            daily: 'temperature_2m_max' + ',weather_code' + ',wind_speed_10m_max' + ',sunset' + ',sunrise',
             }
         });
     return responce

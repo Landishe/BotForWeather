@@ -31,8 +31,6 @@ theme: /
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
-                    current: 'temperature_2m',
-                    daily: "temperature_2m_max",
                     date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
                 log($session.cityData);
@@ -72,7 +70,7 @@ theme: /
                     return timeSunsetSunshine
                 }
                 $temp.timeSunset = convertToLocalTime($temp.weatherResult);
-                log($temp.timeSunset)
+                
                 log($temp.weatherResult)
                 
             
