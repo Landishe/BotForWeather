@@ -1,45 +1,61 @@
-function getTemperature(weatherResult){
-    if (weatherResult.data.current.temperature_2m >= 30) {
+// определение ощущения температуры
+function getTemperature(temperature){
+    if (temperature >= 30) {
         return 'очень жарко';
-    } else if (weatherResult.data.current.temperature_2m >= 25){
+    } else if (temperature >= 25){
         return 'жарко';
-    } else if (weatherResult.data.current.temperature_2m >= 20){
+    } else if (temperature >= 20){
         return 'очень тепло';
-    } else if (weatherResult.data.current.temperature_2m >= 15){
+    } else if (temperature >= 15){
         return 'комфортно';
-    } else if (weatherResult.data.current.temperature_2m >= 10){
+    } else if (temperature >= 10){
         return 'прохладно';
-    } else if (weatherResult.data.current.temperature_2m >= 0){
+    } else if (temperature >= 0){
         return 'холодно';
     } else {
         return 'очень холодно';
     }
 }
 
-function getClothesWeatherOnDay(weatherResult){
+// перевод скорости ветра из км\ч в м\с
+function getWindSpeed (windSpeed) {
+    return (windSpeed/3.6).toFixed(1)
+}
+
+// Определение восхода и заката солнца 
+function convertToLocalTime(timeSunrise, timeSunset){
+    var timeSunsetSunshine = []
+    timeSunsetSunshine.push(timeSunrise.split('T')[1])
+    timeSunsetSunshine.push(timeSunset.split('T')[1])
+    return timeSunsetSunshine
+}
+
+// рекомендация какую одежду одеть сегодня
+function getClothesWeatherOnDay(weatherCodeToday, temperatureToday){
     var recomendationClothes = [];
-    if (weatherResult.data.daily.temperature_2m_max >= 25){
+    if (temperatureToday >= 25){
         recomendationClothes.push('• 😎 Солнечные очки обязательны')
-    } else if (weatherResult.data.current.temperature_2m >= 15) {
+    } else if (temperatureToday >= 15) {
         recomendationClothes.push('• 🧥 Комфортная одежда могут пригодиться')
-    } else if (weatherResult.data.current.temperature_2m >= 5){
+    } else if (temperatureToday >= 5){
         recomendationClothes.push("• 🍂 Дополнительный слой теплой одежды не помешает")
     } else ("• 🧤 Не забудьте перчатки и шарф")
 
-    if (weatherResult.data.daily.weather_code == 0 || weatherResult.data.daily.weather_code == 1){
+    if (weatherCodeToday == 0 || weatherCodeToday == 1){
         recomendationClothes.push("• ☔ Возьмите зонт или дождевики")
-    } else if (weatherResult.data.current.weather_code >= 57 || weatherResult.data.current.weather_code <= 67){
+    } else if (weatherCodeToday >= 57 || weatherCodeToday <= 67){
         recomendationClothes.push('• ☔ Возьмите зонт или дождевик')
-    } else if (weatherResult.data.current.weather_code >= 71 || weatherResult.data.current.weather_code <= 86){
+    } else if (weatherCodeToday >= 71 || weatherCodeToday <= 86){
         recomendationClothes.push('• 👢 Непромокаемая обувь будет кстати')
-    } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
+    } else if (weatherCodeToday >= 95 || weatherCodeToday <= 99){
         recomendationClothes.push('• ⛈️ Избегайте открытых мест во время грозыза')
     }
     return recomendationClothes.join('\n')
 }
 
-function getWeatherCode(weatherResult){
-    switch(weatherResult.data.current.weather_code) {
+// Определение какое погодное условие сейчас
+function getWeatherCode(weatherCode){
+    switch(weatherCode[0]) {
         case 0: return 'ясно☀️';
         case 1: return 'преимущественно ясно🌤';
         case 2: return 'переменная облачность⛅️';
@@ -58,8 +74,9 @@ function getWeatherCode(weatherResult){
     }
 }
 
+// Определение условий погоды на весь день
 function getWeatherCodeToday(weatherResult){
-    switch(weatherResult.data.daily.weather_code[0]) {
+    switch(weatherResult) {
         case 0: return 'ясно☀️';
         case 1: return 'преимущественно ясно🌤';
         case 2: return 'переменная облачность⛅️';
@@ -78,27 +95,47 @@ function getWeatherCodeToday(weatherResult){
     }
 }
 
-function getClothingRecomendation(weatherResult){
+function getClothingRecomendation(temperature, weatherCode){
     var recommendation = []
-    if (weatherResult.data.current.temperature_2m >= 25) {
+    if (temperature >= 25) {
         recommendation.push('футболка👕', 'шорты', 'солнечные очки🕶')
-    } else if (weatherResult.data.current.temperature_2m >= 15) {
+    } else if (temperature >= 15) {
         recommendation.push('кофту или ветровку')
-    } else if (weatherResult.data.current.temperature_2m >= 5){
+    } else if (temperature >= 5){
         recommendation.push("пальто или куртка", "кофта")
     } else ("теплое пальто", "шапка", "перчатки")
 
-    if (weatherResult.data.current.weather_code == 0 || weatherResult.data.current.weather_code == 1){
+    if (weatherCode == 0 || weatherCode == 1){
         recommendation.push("солнечные очки")
-    } else if (weatherResult.data.current.weather_code >= 57 || weatherResult.data.current.weather_code <= 67){
+    } else if (weatherCode >= 57 || weatherCode <= 67){
         recommendation.push('зонт или дождевик')
-    } else if (weatherResult.data.current.weather_code >= 71 || weatherResult.data.current.weather_code <= 86){
+    } else if (weatherCode >= 71 || weatherCode <= 86){
         recommendation.push('зонт и теплую обувь')
-    } else if (weatherResult.data.current.weather_code >= 95 || weatherResult.data.current.weather_code <= 99){
+    } else if (weatherCode >= 95 || weatherCode <= 99){
         recommendation.push('Не выходить на улицу пока идет гроза')
     }
     return recommendation
 }
+
+function filterDays(weekTemperature, weekDays){
+   
+    var days = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт' ,'сб']
+    
+    var firstDay = weekDays[0];
+    var jsDate = new Date(firstDay);
+    var dayOfWeek = jsDate.getDay();
+    
+    var forecast = []
+    for (var i = 0; i < weekTemperature.length; i++){
+        var currentDate = new Date(weekDays[i]);
+        var dayName = days[currentDate.getDay()];
+        var temperature = Math.round(weekTemperature[i]);
+        forecast.push(dayName + ": " + temperature + "°C");
+    }
+    return forecast.join("\n");
+}
+
+
 
 function getWeeklyAverage(weatherResult) {
     var sum = weatherResult.data.daily.temperature_2m_max.reduce(function(a, b){

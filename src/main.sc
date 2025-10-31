@@ -33,7 +33,7 @@ theme: /
                     lon: $parseTree._City.lon,
                     date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
-                log($session.cityData);
+                    log($session.cityData)
             go!: ./question
         
             state: question
@@ -53,52 +53,58 @@ theme: /
             
         state: weatherCurrent
             script:
+                # JSON для работы с данными на сейчас
                 $temp.weatherResult = weatherApi($session.cityData);
-                $temp.tempData = getTemperature($temp.weatherResult);
-                $temp.WeatherCode = getWeatherCode($temp.weatherResult);
-                $temp.clothesRecomendation = getClothingRecomendation($temp.weatherResult);
+                log($temp.weatherResult);
+                # переменная для температуры сейчас;
+                $session.temperature = $temp.weatherResult.data.current.temperature_2m;
+                # переменная для кода погоды
+                $session.weatherCode = $temp.weatherResult.data.current.weather_code;
+                # переменная для скорости погоды
+                $session.windSpeed = $temp.weatherResult.data.current.wind_speed_10m;
+                # Погода в течении всего дня
+                $session.temperatureDay = $temp.weatherResult.data.daily.temperature_2m_max[0];
+                # переменная для восхода и заката
+                $session.timeSunrise = $temp.weatherResult.data.daily.sunrise[0];
+                $session.timeSunset = $temp.weatherResult.data.daily.sunset[0];
+                # переменные для функций : температура сейчас, код погоды и рекомендация по одежде, скорость ветра, восхода и заката солнца
+                $temp.tempData = getTemperature($session.temperature);
+                $temp.WeatherCode = getWeatherCode($session.weatherCode);
+                $temp.clothesRecomendation = getClothingRecomendation($session.temperature, $session.weatherCode);
+                $temp.windSpeed = getWindSpeed($session.windSpeed);
+                $temp.timeSunsetOrSunrise = convertToLocalTime($session.timeSunrise, $session.timeSunset)
                 
-                function windSpeed (weatherResult) {
-                    return ($temp.weatherResult.data.current.wind_speed_10m / 3.6).toFixed(1)
-                }
-                $temp.windSpeed = windSpeed($temp.weatherResult)
                 
-                function convertToLocalTime(weatherResult){
-                    var timeSunsetSunshine = []
-                    timeSunsetSunshine.push($temp.weatherResult.data.daily.sunrise[0].split('T')[1])
-                    timeSunsetSunshine.push($temp.weatherResult.data.daily.sunset[0].split('T')[1])
-                    return timeSunsetSunshine
-                }
-                $temp.timeSunset = convertToLocalTime($temp.weatherResult);
-                
-                log($temp.weatherResult)
-                
-            
             if: $temp.weatherResult.isOk
-                if: (($session.cityData.date <= $temp.timeSunset[0]) || ($session.cityData.date >= $temp.timeSunset[1]))
-                    a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Ощущается как: {{$temp.tempData}}"
-                    
+                if: (($session.cityData.date <= $temp.timeSunsetOrSunrise[0]) || ($session.cityData.date >= $temp.timeSunsetOrSunrise[1]))
+                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Ощущается как: "{{$temp.tempData}}"
                 else:
-                    a: Сейчас в городе {{$session.cityData.name}} {{$temp.weatherResult.data.current.temperature_2m}} °C. Ожидается до {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
                     a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
         state: weatherOnDay
             script:
+                # переменная для json для работы с данными на сегодня
                 $temp.weatherResult = weatherApi($session.cityData);
-                $temp.tempData = getTemperature($temp.weatherResult);
-                $temp.getWeatherCodeToday = getWeatherCodeToday($temp.weatherResult);
-                $temp.clothesRecomendation = getClothesWeatherOnDay($temp.weatherResult);
-                log($temp.weatherResult)
+                # Переменная для скорости ветра
+                $session.windSpeedToday = $temp.weatherResult.data.daily.wind_speed_10m_max[0];
+                # Переменная для кода погоды сегодня
+                $session.weatherCodeToday = $temp.weatherResult.data.daily.weather_code[0]
+                # Переменная для температуры сегодня
+                $session.temperatureDaily = $temp.weatherResult.data.daily.temperature_2m_max[0];
                 
-                function windSpeed (weatherResult) {
-                    return ($temp.weatherResult.data.daily.wind_speed_10m_max[0] / 3.6).toFixed(1)
-                }
-                $temp.windSpeed = windSpeed($temp.weatherResult);
+                # Определение погодных условий
+                $temp.getWeatherCodeToday = getWeatherCodeToday($session.weatherCodeToday);
+                # Рекомендация по одежде
+                $temp.clothesRecomendation = getClothesWeatherOnDay($session.weatherCodeToday, $session.temperatureDaily);
+                # определение скорости ветра
+                $temp.windSpeed = getWindSpeed($session.windSpeedToday)
+                
                 
             if: $temp.weatherResult.isOk
-                a: Сегодня в городе ожидается {{$session.cityData.name}} {{$temp.weatherResult.data.daily.temperature_2m_max[0]}}°C.
+                a: Сегодня в городе ожидается {{$session.cityData.name}} {{$session.temperatureDaily}}°C.
                    {{$temp.tempData}} и {{$temp.getWeatherCodeToday}}, сила ветра {{$temp.windSpeed + 'м/с'}}.
                 a: Рекомендация:\n {{$temp.clothesRecomendation}}
             else:
@@ -107,29 +113,20 @@ theme: /
         state: weatherOnWeek
             script:
                 $temp.weatherResultWeek = weatherApi($session.cityData);
+                # Переменная для сводки погоды на неделю
+                $temp.weekTemperature = $temp.weatherResultWeek.data.daily.temperature_2m_max;
+                # Переменная которая 
+                $temp.weekDays = $temp.weatherResultWeek.data.daily.time;
                 $temp.getWeeklyAverage = getWeeklyAverage($temp.weatherResultWeek);
                 $temp.getWeeklyGeneralAdvice = getWeeklyGeneralAdvice($temp.weatherResultWeek);
                 $temp.getTemperatureRange = getTemperatureRange($temp.weatherResultWeek);
                 $temp.getRangeAdvice=getRangeAdvice($temp.weatherResultWeek);
+                # Функция которая синхронизирует дни неделе к погоде по дням
+                $temp.filterDays = filterDays($temp.weekTemperature, $temp.weekDays)
                 
-                var weatherWeek = $temp.weatherResultWeek.data.daily.temperature_2m_max;
-                var days = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт' ,'сб']
-                var day = $temp.weatherResultWeek.data.daily.time;
-                var firstDay = day[0];
-                var jsDate = new Date(firstDay);
-                var dayOfWeek = jsDate.getDay();
-                
-                var forecast = []
-                for (var i = 0; i < weatherWeek.length; i++){
-                    var currentDate = new Date(day[i]);
-                    var dayName = days[currentDate.getDay()];
-                    var temperature = Math.round(weatherWeek[i]);
-                    forecast.push(dayName + ": " + temperature + "°C");
-                }
-                $temp.forecastText = forecast.join("\n");
-                
+               
             if: $temp.weatherResultWeek.isOk
-                a: На этой неделе в городе {{$session.cityData.name}} ожидается:\n{{$temp.forecastText}}
+                a: На этой неделе в городе {{$session.cityData.name}} ожидается:\n{{$temp.filterDays}}
                 a: Диапозон от {{$temp.getTemperatureRange.min + "°C"}} до {{$temp.getTemperatureRange.max + "°C"}}
                    Средняя температура: {{$temp.getWeeklyAverage + "°C"}}
                    {{$temp.getRangeAdvice}}
