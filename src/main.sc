@@ -25,7 +25,8 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                
+                var queryOrder = $request.query
+                log(queryOrder);
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
