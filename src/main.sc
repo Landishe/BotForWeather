@@ -55,9 +55,8 @@ theme: /
                 
                 # JSON для работы с данными на сейчас
                 $session.weatherResult = weatherApi($session.cityData);
-                //$session.weatherResult = вцелом не нужна
-                log('строка 58 тут приходит json ' + typeof ($session.weatherResult))
-                log('строка 59 тут приходит json ' + $session.weatherResult.data)
+               
+                
                 # переменная для температуры сейчас;
                 $session.temperature = $session.weatherResult.data.current.temperature_2m;
                 # переменная для кода погоды
