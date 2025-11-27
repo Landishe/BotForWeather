@@ -11,12 +11,10 @@ require: dateTime/moment.min.js
     module = sys.zb-common
 
 theme: /
-
+# стейты называются с заглавной буквы
     state: start
         q!: $regex<start>
-        script:
-            $session = {}
-            $temp = {}
+        script: 
         a: ** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"**
             \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
         go!: ./whereAreYou
@@ -27,13 +25,15 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
+                
+                log($reaction.answer)
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
                     date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
-                    log($session.cityData)
+                    
             go!: ./question
         
             state: question
@@ -53,39 +53,43 @@ theme: /
             
         state: weatherCurrent
             script:
+                
                 # JSON для работы с данными на сейчас
-                $temp.weatherResult = weatherApi($session.cityData);
-                log($temp.weatherResult);
+                $session.weatherResult = weatherApi($session.cityData);
+                //$session.weatherResult = вцелом не нужна
+                log('строка 58 тут приходит json ' + typeof ($session.weatherResult))
+                log('строка 59 тут приходит json ' + $session.weatherResult.data)
                 # переменная для температуры сейчас;
-                $session.temperature = $temp.weatherResult.data.current.temperature_2m;
+                $session.temperature = $session.weatherResult.data.current.temperature_2m;
                 # переменная для кода погоды
-                $session.weatherCode = $temp.weatherResult.data.current.weather_code;
+                $session.weatherCode = $session.weatherResult.data.current.weather_code;
                 # переменная для скорости погоды
-                $session.windSpeed = $temp.weatherResult.data.current.wind_speed_10m;
+                $session.windSpeed = $session.weatherResult.data.current.wind_speed_10m;
                 # Погода в течении всего дня
-                $session.temperatureDay = $temp.weatherResult.data.daily.temperature_2m_max[0];
+                $session.temperatureDay = $session.weatherResult.data.daily.temperature_2m_max[0];
                 # переменная для восхода и заката
-                $session.timeSunrise = $temp.weatherResult.data.daily.sunrise[0];
-                $session.timeSunset = $temp.weatherResult.data.daily.sunset[0];
+                $session.timeSunrise = $session.weatherResult.data.daily.sunrise[0];
+                $session.timeSunset = $session.weatherResult.data.daily.sunset[0];
                 # переменные для функций : температура сейчас, код погоды и рекомендация по одежде, скорость ветра, восхода и заката солнца
-                $temp.tempData = getTemperature($session.temperature);
-                $temp.WeatherCode = getWeatherCode($session.weatherCode);
+                $temp.tempData = getTemperature($session.temperature); //вот тут и ниже правильно
+                $temp.weatherCode = getWeatherCode($session.weatherCode);
                 $temp.clothesRecomendation = getClothingRecomendation($session.temperature, $session.weatherCode);
                 $temp.windSpeed = getWindSpeed($session.windSpeed);
                 $temp.timeSunsetOrSunrise = convertToLocalTime($session.timeSunrise, $session.timeSunset)
                 
                 
-            if: $temp.weatherResult.isOk
+            if: $session.weatherResult.isOk
                 if: (($session.cityData.date <= $temp.timeSunsetOrSunrise[0]) || ($session.cityData.date >= $temp.timeSunsetOrSunrise[1]))
                     a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Ощущается как: "{{$temp.tempData}}"
                 else:
-                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.WeatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.weatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
                     a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
         
         state: weatherOnDay
             script:
+                log("Здесь переменная из weatherCurrent " + $session.weatherResult)
                 # переменная для json для работы с данными на сегодня
                 $temp.weatherResult = weatherApi($session.cityData);
                 # Переменная для скорости ветра
@@ -94,7 +98,6 @@ theme: /
                 $session.weatherCodeToday = $temp.weatherResult.data.daily.weather_code[0]
                 # Переменная для температуры сегодня
                 $session.temperatureDaily = $temp.weatherResult.data.daily.temperature_2m_max[0];
-                
                 # Определение погодных условий
                 $temp.getWeatherCodeToday = getWeatherCodeToday($session.weatherCodeToday);
                 # Рекомендация по одежде
@@ -115,8 +118,9 @@ theme: /
                 $temp.weatherResultWeek = weatherApi($session.cityData);
                 # Переменная для сводки погоды на неделю
                 $temp.weekTemperature = $temp.weatherResultWeek.data.daily.temperature_2m_max;
-                # Переменная которая 
+                # Переменная для массива дат
                 $temp.weekDays = $temp.weatherResultWeek.data.daily.time;
+                
                 $temp.getWeeklyAverage = getWeeklyAverage($temp.weatherResultWeek);
                 $temp.getWeeklyGeneralAdvice = getWeeklyGeneralAdvice($temp.weatherResultWeek);
                 $temp.getTemperatureRange = getTemperatureRange($temp.weatherResultWeek);

@@ -40,7 +40,7 @@
     "priority" : 0
   } ],
   "entities" : [ ],
-  "enabledSystemEntities" : [ "duckling.number", "duckling.time", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
+  "enabledSystemEntities" : [ "duckling.number", "duckling.time", "duckling.duration", "duckling.url", "zb.datetime" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
     "name" : "mystem.geo",
@@ -122,11 +122,11 @@
   }, {
     "name" : "duckling.phone-number",
     "version" : "v2",
-    "enabled" : true
+    "enabled" : false
   }, {
     "name" : "duckling.email",
     "version" : "v2",
-    "enabled" : true
+    "enabled" : false
   }, {
     "name" : "duckling.url",
     "version" : "v2",
@@ -140,7 +140,7 @@
     "enabled" : false
   }, {
     "name" : "zb.datetime",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "zb.number",
     "enabled" : false

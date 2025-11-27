@@ -1,113 +1,58 @@
-<test>
-    
-    
-    <test-case id="weatherCurrent">
+<test integration="false">
+    <test-case id="1">
         <mockData>
-        <query method="GET">https://api.open-meteo.com/v1/forecast?latitude=59.93801&amp;longitude=30.32132&amp;timezone=auto&amp;current=temperature_2m,weather_code,wind_speed_10m&amp;daily=temperature_2m_max,weather_code,wind_speed_10m_max,sunrise,sunset</query>
-        <response type="json" status="200">
-            {
-                "data":{
-                    "latitude":55.75,
-                    "longitude":37.625,
-                    "generationtime_ms":0.1533031463623047,
-                    "utc_offset_seconds":10800,
-                    "timezone":"Europe/Moscow",
-                    "timezone_abbreviation":"GMT+3",
-                    "elevation":141,
-                    "current_units":{
-                        "time":"iso8601",
-                        "interval":"seconds",
-                        "temperature_2m":"°C",
-                        "weather_code":"wmo code",
-                        "wind_speed_10m":"km/h"
-                    },
-                    "current":{
-                       "time":"2025-10-29T20:00",
-                        "interval":900,
-                        "temperature_2m":5.2,
-                        "weather_code":2,
-                        "wind_speed_10m":3.9
-                    },
-                    "daily_units":{
-                        "time":"iso8601",
-                        "temperature_2m_max":"°C",
-                        "weather_code":"wmo code",
-                        "wind_speed_10m_max":"km/h",
-                        "sunset":"iso8601",
-                        "sunrise":"iso8601"
-                    },
-                    "daily":{
-                        "time":[
-                            "2025-10-29",
-                            "2025-10-30",
-                            "2025-10-31",
-                            "2025-11-01",
-                            "2025-11-02",
-                            "2025-11-03",
-                            "2025-11-04"
-                        ],
-                        "temperature_2m_max":[
-                            7.5,
-                            7.8,
-                            6,
-                            6,
-                            8,
-                            9.5,
-                            9.5
-                        ],
-                        "weather_code":[
-                            80,
-                            3,
-                            61,
-                            3,
-                            3,
-                            61,
-                            61
-                        ],
-                        "wind_speed_10m_max":[
-                            8.4,
-                            8,
-                            12.5,
-                            6.4,
-                            6.4,
-                            15.3,
-                            20.9
-                        ],
-                        "sunset":[
-                            "2025-10-29T16:56",
-                            "2025-10-30T16:54",
-                            "2025-10-31T16:51",
-                            "2025-11-01T16:49",
-                            "2025-11-02T16:47",
-                            "2025-11-03T16:45",
-                            "2025-11-04T16:43"
-                        ],
-                        "sunrise":[
-                            "2025-10-29T07:30",
-                            "2025-10-30T07:32",
-                            "2025-10-31T07:34",
-                            "2025-11-01T07:36",
-                            "2025-11-02T07:38",
-                            "2025-11-03T07:40",
-                            "2025-11-04T07:42"
-                        ]
+            <query method="get">https://api.open-meteo.com/v1/forecast?latitude=55.75&amp;longitude=37.62&amp;timezone=auto&amp;current=temperature_2m,weather_code,wind_speed_10m&amp;daily=temperature_2m_max,weather_code,wind_speed_10m_max,sunset,sunrise</query>
+                <parameters>
+                    <latitude>55.75</latitude>
+                    <longitude>37.62</longitude>
+                    <timezone>auto</timezone>
+                    <current>temperature_2m, weather_code, wind_speed_10m</current>
+                    <daily>temperature_2m_max, weather_code, wind_speed_10m_max, sunset,sunrise</daily>
+                </parameters>
+                <response type="json" status="200">
+                    {"data": {
+                        "latitude":55.75,
+                        "longitude":37.62,
+                           
+                        "current":{
+                            "temperature_2m":4.8,
+                            "weather_code":3,
+                            "wind_speed_10m":6
+                        },
+                        "daily":{
+                            "temperature_2m_max":[
+                                "8.7",
+                            ],
+                            "sunset":[
+                                "2025-11-05T16:41",
+                            ],
+                            "sunrise":[
+                                "2025-11-05T07:44",
+                            ]
+                        }
                     }
-                },
-               
-            }
-        </response>
-    </mockData>  
+                    }
+                </response>
+        </mockData> 
+    </test-case>
+    
+    <test-case id="weatherNow" depends="1">
+       
+        
         <q state="/start">/start</q>
+        <newSession/>
         <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
         <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
         <q>Москва</q>
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
         <q>сейчас</q>
-        <a state="/start/weatherCurrent">Сейчас в городе Москве 5.2 °C. Ожидается до 7.5°C. Ощущается как: "холодно"</a>
+        <a state="/start/weatherCurrent">Сейчас в городе Москве 4/8 °C. Ожидается до 8.7°C. Сейчас в городе холодно и неизвестно Сила ветра 2.3м/с.</a>
+        <a>Вот что может пригодиться сейчас: пальто или куртка, кофта, зонт или дождевик</a>
     </test-case>
    
-   
-    <test-case id="wetherOnDay">
+    <test-case id="wetherOnDay" depends="1">
+       
+        
         <q>/start</q>
         <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
         <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
@@ -118,8 +63,9 @@
         <a>Рекомендация: • 🍂 Дополнительный слой теплой одежды не помешает • ☔ Возьмите зонт или дождевик</a>
     </test-case>
     
-    
-    <test-case id="weatherOnWeek">
+    <test-case id="weatherOnWeek" depends="1">
+       
+        
         <q>/start</q>
         <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
         <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
@@ -132,4 +78,3 @@
     </test-case>
     
 </test>
-

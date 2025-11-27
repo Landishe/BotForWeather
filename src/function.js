@@ -118,13 +118,10 @@ function getClothingRecomendation(temperature, weatherCode){
 }
 
 function filterDays(weekTemperature, weekDays){
-   
     var days = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт' ,'сб']
-    
     var firstDay = weekDays[0];
     var jsDate = new Date(firstDay);
     var dayOfWeek = jsDate.getDay();
-    
     var forecast = []
     for (var i = 0; i < weekTemperature.length; i++){
         var currentDate = new Date(weekDays[i]);
@@ -188,7 +185,6 @@ function getWeeklyGeneralAdvice(weatherResult){
 
 function getTemperatureRange(weatherResult) {
     var temperatures = weatherResult.data.daily.temperature_2m_max;
-    log(temperatures)
     
     var min = temperatures[0];
     for (var i = 1; i < temperatures.length; i++) {
@@ -204,7 +200,6 @@ function getTemperatureRange(weatherResult) {
         }
     }
     
-    
     var range = max - min;
     
     return {
@@ -214,6 +209,7 @@ function getTemperatureRange(weatherResult) {
         hasBigChanges: range > 10,
     };
 }
+
 function getRangeAdvice(weatherResult) {
     var tempRange = getTemperatureRange(weatherResult);
     if(tempRange.hasBigChanges){
