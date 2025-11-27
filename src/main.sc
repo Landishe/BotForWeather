@@ -26,7 +26,6 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 
-                log($reaction.answer)
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
