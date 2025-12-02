@@ -138,6 +138,9 @@ theme: /
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
+    state: Match
+        event!: telegramSendLocation
+        
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите
