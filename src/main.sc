@@ -26,35 +26,37 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
+                # log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
                 
-                function sendTelegramLocation(telegaData){
-                    log('старт определение локации');
-                    
-                    var dataLocation = telegaData
-                    
-                    if(dataLocation) {
-                        $session.cityData = {
-                        lat: dataLocation.latitude,
-                        lon: dataLocation.longitude,
-                        };
-                        log('создалась переменная по геолокации');
-                    } else {
-                        $session.cityData = {
-                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                        lat: $parseTree._City.lat,
-                        lon: $parseTree._City.lon,
-                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                        };
-                        log('создалась переменная по городу');
-                    }
-                    log('вернулась переменная с данными, стоп');
-                    return $session.cityData
-                }  
                 
-                $session.locationData = sendTelegramLocation(telegaData)
-                log('данные в переменной $session.cityData = ' +  JSON.stringify($session.cityDatat))
-                log('Данные из функции $session.locationData = ' + JSON.stringify($session.locationDat))
+                $session.cityData = {
+                name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                lat: $parseTree._City.lat,
+                lon: $parseTree._City.lon,
+                date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                };
+                log('создалась переменная по городу');
+        
+                # function sendTelegramLocation(){
+                #     log('старт определение локации');
+                    
+                    
+                #     else {
+                #         var dataLocation = telegaData
+                #         $session.cityData = {
+                #         lat: dataLocation.latitude,
+                #         lon: dataLocation.longitude,
+                #         };
+                #         log('создалась переменная по геолокации');
+                #     } 
+                #     log('вернулась переменная с данными, стоп');
+                #     return $session.cityData
+                    
+                # }  
+                
+                # $session.locationData = sendTelegramLocation(telegaData)
+                # log('данные в переменной $session.cityData = ' +  JSON.stringify($session.cityDatat))
+                # log('Данные из функции $session.locationData = ' + JSON.stringify($session.locationDat))
             go!: ./question
         
             state: question
