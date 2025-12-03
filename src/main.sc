@@ -142,7 +142,7 @@ theme: /
         script:
             log('пришли данны из Телеграмма');
             var $context = $jsapi.context(); 
-            $context.telegaData = $context.request.data
+            var telegaData = $context.request.data
             log(telegaData)
             
             
