@@ -27,13 +27,13 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
-                $session.locationData = sendTelegramLocation(telegaData)
+                
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
                     
                     var dataLocation = telegaData
                     
-                    if(!$parseTree._City) {
+                    if(!dataLocation) {
                         $session.cityData = {
                         lat: dataLocation.latitude,
                         lon: dataLocation.longitude,
@@ -52,7 +52,7 @@ theme: /
                     return $session.cityData
                 }  
                 
-                
+                $session.locationData = sendTelegramLocation(telegaData)
                 log('данные в переменной $session.cityData = ' +  JSON.stringify($session.cityDatat))
                 log('Данные из функции $session.locationData = ' + JSON.stringify($session.locationDat))
             go!: ./question
