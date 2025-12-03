@@ -1,7 +1,7 @@
 <test integration="false">
     <test-case id="1">
         <mockData>
-            <query method="get">https://api.open-meteo.com/v1/forecast?latitude=55.75&amp;longitude=37.62&amp;timezone=auto&amp;current=temperature_2m,weather_code,wind_speed_10m&amp;daily=temperature_2m_max,weather_code,wind_speed_10m_max,sunset,sunrise</query>
+            <query method="get">https://api.open-meteo.com/v1/forecast</query>
                 <parameters>
                     <latitude>55.75</latitude>
                     <longitude>37.62</longitude>
@@ -40,7 +40,7 @@
        
         
         <q state="/start">/start</q>
-        <newSession/>
+        
         <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
         <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
         <q>Москва</q>

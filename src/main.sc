@@ -25,15 +25,14 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                var queryOrder = $request.query
-                log(queryOrder);
+                
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                     lat: $parseTree._City.lat,
                     lon: $parseTree._City.lon,
                     date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
-                    
+                log($session.cityData)
             go!: ./question
         
             state: question
@@ -56,8 +55,6 @@ theme: /
                 
                 # JSON для работы с данными на сейчас
                 $session.weatherResult = weatherApi($session.cityData);
-               
-                
                 # переменная для температуры сейчас;
                 $session.temperature = $session.weatherResult.data.current.temperature_2m;
                 # переменная для кода погоды
@@ -138,9 +135,16 @@ theme: /
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
-    state: Match
+    state: NoMatch
         event!: telegramSendLocation
-        
+        script:
+            var $temp = $jsapi.temp($temp.dataEvent);    
+                log($temp)
+            $temp.dataEvent = $request.data.eventData
+            log($temp.dataEvent)
+            log($temp)
+            log('пришли данныэ');
+                
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите
