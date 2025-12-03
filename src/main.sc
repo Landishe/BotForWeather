@@ -29,7 +29,7 @@ theme: /
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
                     var dataLocation = telegaData
-                    if(!dataLocation){
+                    if(dataLocation) {
                         $session.cityData = {
                         lat: dataLocation.latitude,
                         lon: dataLocation.longitude,
