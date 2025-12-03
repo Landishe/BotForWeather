@@ -28,8 +28,10 @@ theme: /
             script:
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
+                    
                     var dataLocation = telegaData
-                    if(dataLocation) {
+                    
+                    if(!$parseTree._City) {
                         $session.cityData = {
                         lat: dataLocation.latitude,
                         lon: dataLocation.longitude,
@@ -44,11 +46,11 @@ theme: /
                         };
                         log('создалась переменная по городу');
                     }
-                    return $session.cityData
                     log('вернулась переменная с данными, стоп');
+                    return $session.cityData
                 }  
                 
-                $session.locationData = sendTelegramLocation()
+                $session.locationData = sendTelegramLocation(telegaData)
                 log('данные в переменной $session.cityData = ' + $session.cityData )
                 log('Данные из функции $session.locationData = ' + $session.locationData)
             go!: ./question
