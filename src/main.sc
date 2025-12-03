@@ -17,11 +17,7 @@ theme: /
         script: 
         a: ** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"**
             \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
-            script: 
-                function sendTelegramLocation(telegaData){
-                    var dataLocation = telegaData
-                    log('тут в функции данные из Эвента' + dataLocation)
-                    }
+            
         go!: ./whereAreYou
         
         state: whereAreYou
@@ -30,13 +26,23 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                
-                $session.cityData = {
-                    name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                    lat: $parseTree._City.lat,
-                    lon: $parseTree._City.lon,
-                    date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                    };
+                function sendTelegramLocation(telegaData){
+                    var dataLocation = telegaData
+                    if(!dataLocation){
+                        $session.cityData = {
+                        lat: dataLocation.latitude,
+                        lon: dataLocation.longitude,
+                        };
+                    } else {
+                       $session.cityData = {
+                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                        lat: $parseTree._City.lat,
+                        lon: $parseTree._City.lon,
+                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        };
+                    }
+                }  
+               
                 log($session.cityData)
             go!: ./question
         
