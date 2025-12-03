@@ -141,11 +141,8 @@ theme: /
             log('пришли данны из Телеграмма');
             var $temp = $jsapi.temp(); 
             $temp.dataEvent = $temp.request.data.eventData
-            
-                
-            
             log($temp.dataEvent)
-            log($temp)
+            
             
                 
     state: NoMatch
