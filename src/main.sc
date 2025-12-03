@@ -43,8 +43,10 @@ theme: /
                     }
                     return $session.cityData
                 }  
-               
+                
+                $session.locationData = sendTelegramLocation()
                 log($session.cityData)
+                log(sendTelegramLocation(telegaData))
             go!: ./question
         
             state: question
