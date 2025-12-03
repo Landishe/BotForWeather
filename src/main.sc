@@ -48,7 +48,7 @@ theme: /
                     log('вернулась переменная с данными, стоп');
                 }  
                 
-                $session.locationData = sendTelegramLocation(telegaData)
+                $session.locationData = sendTelegramLocation()
                 log('данные в переменной $session.cityData = ' + $session.cityData )
                 log('Данные из функции $session.locationData = ' + $session.locationData)
             go!: ./question
