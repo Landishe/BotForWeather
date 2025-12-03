@@ -41,6 +41,7 @@ theme: /
                         date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                         };
                     }
+                    return $session.cityData
                 }  
                
                 log($session.cityData)
