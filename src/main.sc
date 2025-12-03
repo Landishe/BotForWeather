@@ -26,6 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
+                log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
                 $session.locationData = sendTelegramLocation(telegaData)
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
@@ -159,10 +160,8 @@ theme: /
     state: geolocation
         event: telegramSendLocation
         script:
-            $client.lat = $request.data.eventData
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
-            log("данные из $client.lat =" + JSON.stringify($client.lat))
             log('данные из телеграмм пришли')
             log("данные из telegaData =" + JSON.stringify(telegaData))
             
