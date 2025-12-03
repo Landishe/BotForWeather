@@ -135,15 +135,16 @@ theme: /
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
-    state: Match
-        event!: telegramSendLocation
+    state: geolocation
+        event: telegramSendLocation
         script:
+            log('пришли данныэ');
             var $temp = $jsapi.temp($temp.dataEvent);    
                 log($temp)
             $temp.dataEvent = $request.data.eventData
             log($temp.dataEvent)
             log($temp)
-            log('пришли данныэ');
+            
                 
     state: NoMatch
         event!: noMatch
