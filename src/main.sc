@@ -26,7 +26,7 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 function sendTelegramLocation(telegaData){
-                    log(telegaData)
+                    log (telegaData)
                     }
                 $session.cityData = {
                     name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -142,7 +142,7 @@ theme: /
         script:
             log('пришли данны из Телеграмма');
             var $context = $jsapi.context(); 
-            var telegaData = $context.request.data
+            $context.telegaData = $context.request.data
             log(telegaData)
             
             
