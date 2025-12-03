@@ -160,6 +160,8 @@ theme: /
         script:
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
+            log('данные из телеграмм пришли')
+            log("данные из telegaData =" + telegaData)
             
     state: NoMatch
         event!: noMatch
