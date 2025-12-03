@@ -34,7 +34,7 @@ theme: /
                         lon: dataLocation.longitude,
                         };
                     } else {
-                       $session.cityData = {
+                        $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
                         lon: $parseTree._City.lon,
@@ -151,7 +151,9 @@ theme: /
         script:
             log('пришли данны из Телеграмма');
             var $context = $jsapi.context(); 
-            var telegaData = $context.request.data
+            var telegaData = $context.request.data;
+            $context.telega = $context.request.data.eventData;
+            log($context.telega)
             log(telegaData)
             
             
