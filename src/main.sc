@@ -27,12 +27,14 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 function sendTelegramLocation(telegaData){
+                    log('старт определение локации');
                     var dataLocation = telegaData
                     if(!dataLocation){
                         $session.cityData = {
                         lat: dataLocation.latitude,
                         lon: dataLocation.longitude,
                         };
+                        log('создалась переменная по геолокации');
                     } else {
                         $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -40,13 +42,15 @@ theme: /
                         lon: $parseTree._City.lon,
                         date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                         };
+                        log('создалась переменная по городу');
                     }
                     return $session.cityData
+                    log('вернулась переменная с данными, стоп');
                 }  
                 
                 $session.locationData = sendTelegramLocation(telegaData)
-                log($session.cityData)
-                log($session.locationData)
+                log('данные в переменной $session.cityData = ' + $session.cityData )
+                log('Данные из функции $session.locationData = ' + $session.locationData)
             go!: ./question
         
             state: question
@@ -152,15 +156,9 @@ theme: /
     state: geolocation
         event: telegramSendLocation
         script:
-            log('пришли данны из Телеграмма');
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
-            $context.telega = $context.request.data.eventData;
-            log($context.telega)
-            log(telegaData)
             
-            
-                
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите
