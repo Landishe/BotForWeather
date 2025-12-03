@@ -139,10 +139,9 @@ theme: /
         event: telegramSendLocation
         script:
             log('пришли данны из Телеграмма');
-            var coordinates = $request.data.eventData;
-            Log(coordinates)
-            $temp.dataEvent = $request.data.eventData
-            var $temp = $jsapi.temp();    
+            var $temp = $jsapi.temp(); 
+            $temp.dataEvent = $temp.request.data.eventData
+            
                 
             
             log($temp.dataEvent)
