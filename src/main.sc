@@ -26,6 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
+                $session.locationData = sendTelegramLocation(telegaData)
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
                     
@@ -50,9 +51,9 @@ theme: /
                     return $session.cityData
                 }  
                 
-                $session.locationData = sendTelegramLocation(telegaData)
-                log('данные в переменной $session.cityData = ' + $session.cityData )
-                log('Данные из функции $session.locationData = ' + $session.locationData)
+                
+                log('данные в переменной $session.cityData = ' +  JSON.stringify($session.cityDatat))
+                log('Данные из функции $session.locationData = ' + JSON.stringify($session.locationDat))
             go!: ./question
         
             state: question
@@ -158,10 +159,12 @@ theme: /
     state: geolocation
         event: telegramSendLocation
         script:
+            $client.lat = $request.data.eventData
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
+            log("данные из $client.lat =" + JSON.stringify($client.lat))
             log('данные из телеграмм пришли')
-            log("данные из telegaData =" + telegaData)
+            log("данные из telegaData =" + JSON.stringify(telegaData))
             
     state: NoMatch
         event!: noMatch
