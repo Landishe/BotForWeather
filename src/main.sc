@@ -26,15 +26,15 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                log('this is let context = ' + JSON.stringify($context.telegaData))
-                var hasGeolocation = $context.telegaData && $context.telegaData.eventData.latitude && $context.telegaData.eventData.longitude;
+                function sentLacationTelegramm(telegaData){
+                var hasGeolocation = telegaData && telegaData.eventData.latitude && telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
                     $session.cityData = {
                         
-                        lat: $context.telegaData.latitude,
-                        lon: $context.telegaData.longitude,
+                        lat: telegaData.latitude,
+                        lon: telegaData.longitude,
                         
                     };
                     log('Создана переменная по геолокации');
@@ -55,6 +55,7 @@ theme: /
                     return;
                 }
                 log('cityData: ' + JSON.stringify($session.cityData));
+                }
             go!: ./question
         
             state: question
