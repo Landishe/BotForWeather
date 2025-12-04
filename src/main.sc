@@ -29,9 +29,9 @@ theme: /
                 # log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
                 function sendTelegramLocation(telegaData){
                     log('старт определение локации');
-                    
+                    var dataLocation = telegaData
                     if(telegaData){
-                        var dataLocation = telegaData
+                        
                         $session.geoLocation = {
                         lat: dataLocation.latitude,
                         lon: dataLocation.longitude,
@@ -164,7 +164,7 @@ theme: /
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
             log('данные из телеграмм пришли')
-            log("данные из telegaData =" + JSON.stringify(telegaData))
+            log("данные из telegaData = " + JSON.stringify(telegaData))
             
     state: NoMatch
         event!: noMatch
