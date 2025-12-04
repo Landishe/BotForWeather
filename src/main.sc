@@ -26,7 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                log($context.telegaData)
+                log('this is let context = ' + JSON.stringify($context.telegaData))
                 var hasGeolocation = $context.telegaData && $context.telegaData.eventData.latitude && $context.telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
@@ -134,6 +134,8 @@ theme: /
         state: weatherOnWeek
             script:
                 $temp.weatherResultWeek = weatherApi($session.cityData);
+                
+                log($temp.weatherResult);
                 # Переменная для сводки погоды на неделю
                 $temp.weekTemperature = $temp.weatherResultWeek.data.daily.temperature_2m_max;
                 # Переменная для массива дат
