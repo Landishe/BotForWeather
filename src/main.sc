@@ -27,16 +27,15 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 
-                var hasGeolocation = $context.telegaData;
+                var hasGeolocation = $context.telegaData && $context.telegaData.eventData.latitude && $context.telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
                     $session.cityData = {
-                        name: "ваше местоположение",
+                        
                         lat: $context.telegaData.latitude,
                         lon: $context.telegaData.longitude,
-                        source: "geolocation",
-                        timestamp: $jsapi.currentTime()
+                        
                     };
                     log('Создана переменная по геолокации');
                 } 
