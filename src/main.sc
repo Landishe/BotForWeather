@@ -46,7 +46,6 @@ theme: /
                         lat: $parseTree._City.lat,
                         lon: $parseTree._City.lon,
                         date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                        source: "text_city"
                     };
                     log('Создана переменная по городу');
                 }
@@ -55,6 +54,7 @@ theme: /
                     $reactions.answer("Не удалось определить местоположение");
                     return;
                 }
+                log($session.cityData)
                 # $session.cityData = {
                 # name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                 # lat: $parseTree._City.lat,
