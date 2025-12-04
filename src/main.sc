@@ -26,7 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                
+                log($context.telegaData)
                 var hasGeolocation = $context.telegaData && $context.telegaData.eventData.latitude && $context.telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
@@ -54,7 +54,7 @@ theme: /
                     $reactions.answer("Не удалось определить местоположение");
                     return;
                 }
-                log($session.cityData)
+                log('cityData: ' + JSON.stringify($session.cityData));
             go!: ./question
         
             state: question
