@@ -168,7 +168,7 @@ theme: /
             $context.telegaData = $context.request.data;
             log('данные из телеграмм пришли')
             log("данные из telegaData = " + JSON.stringify(telegaData))
-            
+            log("данные из $context.telegaData = " + JSON.stringify($context.telegaData))
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите
