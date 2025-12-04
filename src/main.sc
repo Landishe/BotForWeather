@@ -42,7 +42,8 @@ theme: /
                     return $session.geoLocation
                 }  
                 
-                
+                var result1 = sendTelegramLocation($context.telegaData)
+                log(result1)
                 
                 $session.cityData = {
                 name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -164,6 +165,7 @@ theme: /
         script:
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
+            $context.telegaData = $context.request.data;
             log('данные из телеграмм пришли')
             log("данные из telegaData = " + JSON.stringify(telegaData))
             
