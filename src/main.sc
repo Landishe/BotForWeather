@@ -42,6 +42,8 @@ theme: /
                     return $session.geoLocation
                 }  
                 
+                var result1 = function sendTelegramLocation(telegaData)
+                log(result1)
                 
                 $session.cityData = {
                 name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
