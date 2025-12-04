@@ -55,19 +55,6 @@ theme: /
                     return;
                 }
                 log($session.cityData)
-                # $session.cityData = {
-                # name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                # lat: $parseTree._City.lat,
-                # lon: $parseTree._City.lon,
-                # date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                # };
-                # log('создалась переменная по городу');
-        
-                
-                
-                # $session.locationData = sendTelegramLocation(telegaData)
-                # log('данные в переменной $session.cityData = ' +  JSON.stringify($session.cityDatat))
-                # log('Данные из функции $session.locationData = ' + JSON.stringify($session.locationDat))
             go!: ./question
         
             state: question
