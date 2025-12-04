@@ -26,32 +26,43 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                # log("данные из telegaData в findCity =" + JSON.stringify(telegaData))
-                function sendTelegramLocation(telegaData){
-                    log('старт определение локации');
-                    var dataLocation = telegaData
-                    if(telegaData){
-                        
-                        $session.geoLocation = {
-                        lat: dataLocation.latitude,
-                        lon: dataLocation.longitude,
-                        };
-                        log('создалась переменная по геолокации');
-                    } 
-                    log('вернулась переменная с данными, стоп');
-                    return $session.geoLocation
-                }  
                 
-                var result1 = sendTelegramLocation($context.telegaData)
-                log(result1)
-                
-                $session.cityData = {
-                name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                lat: $parseTree._City.lat,
-                lon: $parseTree._City.lon,
-                date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                };
-                log('создалась переменная по городу');
+                var hasGeolocation = $context.telegaData;
+                log("Есть геолокация в контексте? " + hasGeolocation);
+                if (hasGeolocation) {
+                    // Используем геолокацию из Telegram
+                    $session.cityData = {
+                        name: "ваше местоположение",
+                        lat: $context.telegaData.latitude,
+                        lon: $context.telegaData.longitude,
+                        source: "geolocation",
+                        timestamp: $jsapi.currentTime()
+                    };
+                    log('Создана переменная по геолокации');
+                } 
+                else if ($parseTree._City && $parseTree._City.name) {
+                    // Используем город из текста
+                    $session.cityData = {
+                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                        lat: $parseTree._City.lat,
+                        lon: $parseTree._City.lon,
+                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        source: "text_city"
+                    };
+                    log('Создана переменная по городу');
+                }
+                else {
+                    log('Нет данных для определения локации');
+                    $reactions.answer("Не удалось определить местоположение");
+                    return;
+                }
+                # $session.cityData = {
+                # name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                # lat: $parseTree._City.lat,
+                # lon: $parseTree._City.lon,
+                # date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                # };
+                # log('создалась переменная по городу');
         
                 
                 
