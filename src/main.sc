@@ -19,14 +19,7 @@ theme: /
             \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
         go!: ./whereAreYou
         
-        state: geolocation
-        event: telegramSendLocation
-        script:
-            var $context = $jsapi.context(); 
-            var telegaData = $context.request.data;
-            $session.telegaData1 = $context.request.data;
         
-        go!: ./question
         
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
@@ -160,7 +153,7 @@ theme: /
         script:
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
-            $session.telegaData1 = $context.request.data;
+            
             log('данные из телеграмм пришли');
             log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
             
