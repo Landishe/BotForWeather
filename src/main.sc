@@ -17,18 +17,20 @@ theme: /
         script: 
         a: ** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"**
             \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
-            
         go!: ./whereAreYou
+        
+        state: geolocation
+        event: telegramSendLocation
+        script:
+            var $context = $jsapi.context(); 
+            var telegaData = $context.request.data;
+            $session.telegaData1 = $context.request.data;
+        
+        go!: findCity
         
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
-            script:
-                if($session.telegaData1){
-                    log($session.telegaData1)
-                    $session.telegaData = $session.telegaData1
-                }else{
-                    log('тут пустота')
-                }
+            
             
         state: findCity
             q!: [$oneWord] $City * 
