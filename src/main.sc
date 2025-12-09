@@ -26,6 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
+                log($session.telegaData);
                 function sentLacationTelegramm(telegaData){
                 var hasGeolocation = telegaData && telegaData.eventData.latitude && telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
@@ -165,10 +166,11 @@ theme: /
         script:
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
-            $context.telegaData = $context.request.data;
+            $session.telegaData = $context.request.data;
             log('данные из телеграмм пришли')
             log("данные из telegaData = " + JSON.stringify(telegaData))
             log("данные из $context.telegaData = " + JSON.stringify($context.telegaData))
+            
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите
