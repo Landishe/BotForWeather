@@ -37,10 +37,7 @@ theme: /
                     };
                     log('Создана переменная по геолокации')
                     return $session.cityData;
-                } 
-            go!: ./question
-                
-                if ($parseTree._City && $parseTree._City.name) {
+                } else if ($parseTree._City && $parseTree._City.name) {
                     // Используем город из текста
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
