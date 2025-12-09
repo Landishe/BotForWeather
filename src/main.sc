@@ -27,7 +27,7 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 log($session.telegaData);
-                function sentLacationTelegramm(telegaData){
+                function sentLacationTelegramm($session.telegaData){
                 var hasGeolocation = telegaData && telegaData.eventData.latitude && telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
