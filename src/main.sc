@@ -25,6 +25,7 @@ theme: /
             script:
                 if($session.telegaData1){
                     log($session.telegaData1)
+                    $session.telegaData = $session.telegaData1
                 }else{
                     log('тут пустота')
                 }
@@ -33,7 +34,9 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 // Используем город из текста
-                
+                if($session.telegaData){
+                    log('тут уже в FindSity ' + JSON.stringify($session.telegaData))
+                }
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
