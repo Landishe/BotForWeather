@@ -26,18 +26,9 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                function sentLacationTelegramm(telegaData1) {
-                var hasGeolocation = telegaData1;
-                log("Есть геолокация в контексте? " + hasGeolocation);
-                if (hasGeolocation) {
-                    // Используем геолокацию из Telegram
-                    $session.cityData = {
-                        lat: telegaData1.latitude,
-                        lon: telegaData1.longitude,
-                    };
-                    log('Создана переменная по геолокации')
-                    return $session.cityData;
-                } else if ($parseTree._City && $parseTree._City.name) {
+                
+                    
+                
                     // Используем город из текста
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -45,16 +36,7 @@ theme: /
                         lon: $parseTree._City.lon,
                         date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                     };
-                    log('Создана переменная по городу');
-                }
-                else {
-                    log('Нет данных для определения локации');
-                    $reactions.answer("Не удалось определить местоположение");
-                    return;
-                }
-                log('cityData: ' + JSON.stringify($session.cityData));
-                return $session.cityData;
-                }
+                    
             go!: ./question
         
             state: question
