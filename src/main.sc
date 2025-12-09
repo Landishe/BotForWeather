@@ -25,13 +25,13 @@ theme: /
             script:
                 if($session.telegaData1){
                     log($session.telegaData1)
-                    
+                };
             
         state: findCity
             q!: [$oneWord] $City * 
             script:
                 // Используем город из текста
-                log($session.telegaData1)
+                
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
