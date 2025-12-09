@@ -19,24 +19,24 @@ theme: /
             \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
         go!: ./whereAreYou
         
-        state: telegaLocation
+        
+                    
+        state: whereAreYou
+            a: Уточните в каком городе посмотреть погоду?
             
+        state: telegaLocation
             script:
                 var test = true
                 if($session.telegaData){
                   test = false
                 }
-                    
-        state: whereAreYou
-            a: Уточните в каком городе посмотреть погоду?
-            
             
         state: findCity
             q!: [$oneWord] $City * 
             script:
                 // Используем город из текста
                 
-                    log('тут уже в FindSity ' + JSON.stringify($session.telegaData))
+                    log('тут уже в FindSity ' + JSON.stringify($session.telegaData));
                 
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
