@@ -26,8 +26,7 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                
-                function sentLacationTelegramm(telegaData1){
+                function sentLacationTelegramm(telegaData1) {
                 var hasGeolocation = telegaData1;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
@@ -54,6 +53,7 @@ theme: /
                     return;
                 }
                 log('cityData: ' + JSON.stringify($session.cityData));
+                return $session.cityData;
                 }
             go!: ./question
         
