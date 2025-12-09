@@ -22,7 +22,9 @@ theme: /
         
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
-            
+            script:
+                if($session.telegaData1){
+                    log($session.telegaData1)
                     
             
         state: findCity
