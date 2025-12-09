@@ -28,7 +28,7 @@ theme: /
             script:
                 log($session.telegaData);
                 function sentLacationTelegramm(telegaData1){
-                var hasGeolocation = telegaData && telegaData.eventData.latitude && telegaData.eventData.longitude;
+                var hasGeolocation = telegaData1 && telegaData1.eventData.latitude && telegaData1.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
