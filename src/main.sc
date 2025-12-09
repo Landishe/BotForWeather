@@ -27,6 +27,7 @@ theme: /
                     log($session.telegaData1)
                 }else{
                     log('тут пустота')
+                }
             
         state: findCity
             q!: [$oneWord] $City * 
