@@ -25,7 +25,8 @@ theme: /
             script:
                 if($session.telegaData1){
                     log($session.telegaData1)
-                };
+                }else{
+                    log('тут пустота')
             
         state: findCity
             q!: [$oneWord] $City * 
