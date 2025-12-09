@@ -28,16 +28,13 @@ theme: /
             script:
                 
                 function sentLacationTelegramm(telegaData1){
-                var hasGeolocation = telegaData1 && telegaData1.eventData.latitude && telegaData1.eventData.longitude;
-                log("тут переменная $session.telegaData1" );
+                var hasGeolocation = telegaData1;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
                     $session.cityData = {
-                        
                         lat: telegaData.latitude,
                         lon: telegaData.longitude,
-                        
                     };
                     log('Создана переменная по геолокации');
                 } 
