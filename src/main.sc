@@ -26,7 +26,7 @@ theme: /
             var telegaData = $context.request.data;
             $session.telegaData1 = $context.request.data;
         
-        go!: findCity
+        go!: ./question
         
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
@@ -51,6 +51,9 @@ theme: /
             state: question
                 a: Вы хотите узнать погоду на сейчас, сегодня или на неделю?
                 script: 
+                    if($session.telegaData){
+                    log('тут уже в FindSity ' + JSON.stringify($session.telegaData))
+                    };
                     $session.weatherResult1 = weatherApi($session.cityData);
         
         state: ask
