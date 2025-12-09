@@ -29,7 +29,7 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 // Используем город из текста
-                
+                log($session.telegaData1)
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
