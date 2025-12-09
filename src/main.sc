@@ -26,9 +26,10 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                log($session.telegaData);
+                
                 function sentLacationTelegramm(telegaData1){
                 var hasGeolocation = telegaData1 && telegaData1.eventData.latitude && telegaData1.eventData.longitude;
+                log("тут переменная $session.telegaData1" );
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
