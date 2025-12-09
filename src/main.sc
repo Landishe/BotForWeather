@@ -165,7 +165,7 @@ theme: /
     state: geolocation
         event: telegramSendLocation
         script:
-            var $session = $jsapi.session(); 
+            var $context = $jsapi.$context(); 
             var telegaData = $context.request.data;
             $session.telegaData1 = $context.request.data;
             log('данные из телеграмм пришли')
