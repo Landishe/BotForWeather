@@ -32,10 +32,11 @@ theme: /
                 if (hasGeolocation) {
                     // Используем геолокацию из Telegram
                     $session.cityData = {
-                        lat: telegaData.latitude,
-                        lon: telegaData.longitude,
+                        lat: telegaData1.latitude,
+                        lon: telegaData1.longitude,
                     };
-                    log('Создана переменная по геолокации');
+                    log('Создана переменная по геолокации')
+                    return;
                 } 
                 else if ($parseTree._City && $parseTree._City.name) {
                     // Используем город из текста
