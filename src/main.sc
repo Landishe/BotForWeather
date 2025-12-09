@@ -36,9 +36,11 @@ theme: /
                         lon: telegaData1.longitude,
                     };
                     log('Создана переменная по геолокации')
-                    return;
+                    return $session.cityData;
                 } 
-                else if ($parseTree._City && $parseTree._City.name) {
+            go!: ./question
+                
+                if ($parseTree._City && $parseTree._City.name) {
                     // Используем город из текста
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -166,9 +168,8 @@ theme: /
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
             $session.telegaData1 = $context.request.data;
-            log('данные из телеграмм пришли')
-            log("данные из telegaData = " + JSON.stringify(telegaData))
-            log("данные из $session.telegaData = " + JSON.stringify($session.telegaData))
+            log('данные из телеграмм пришли');
+            log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
             
     state: NoMatch
         event!: noMatch
