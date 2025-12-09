@@ -27,7 +27,7 @@ theme: /
             q!: [$oneWord] $City * 
             script:
                 log($session.telegaData);
-                function sentLacationTelegramm($session.telegaData){
+                function sentLacationTelegramm(telegaData1){
                 var hasGeolocation = telegaData && telegaData.eventData.latitude && telegaData.eventData.longitude;
                 log("Есть геолокация в контексте? " + hasGeolocation);
                 if (hasGeolocation) {
@@ -166,7 +166,7 @@ theme: /
         script:
             var $context = $jsapi.context(); 
             var telegaData = $context.request.data;
-            $session.telegaData = $context.request.data;
+            $session.telegaData1 = $context.request.data;
             log('данные из телеграмм пришли')
             log("данные из telegaData = " + JSON.stringify(telegaData))
             log("данные из $session.telegaData = " + JSON.stringify($session.telegaData))
