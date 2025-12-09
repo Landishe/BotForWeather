@@ -22,14 +22,16 @@ theme: /
         
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
+            script:
+                if($session.telegaData1){
+                    return $session.telegaData1}
+                    
             
         state: findCity
             q!: [$oneWord] $City * 
             script:
-                
-                    
-                
-                    // Используем город из текста
+                // Используем город из текста
+                log($session.telegaData1)
                     $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
@@ -41,6 +43,8 @@ theme: /
         
             state: question
                 a: Вы хотите узнать погоду на сейчас, сегодня или на неделю?
+                script: 
+                    $session.weatherResult1 = weatherApi($session.cityData);
         
         state: ask
             q!: $regexp_i<(?:на\s+)?(сейчас)>
@@ -56,7 +60,7 @@ theme: /
             
         state: weatherCurrent
             script:
-                
+                log("здесь данные с $session.weatherResult" + JSON.stringify($session.weatherResult1));
                 # JSON для работы с данными на сейчас
                 $session.weatherResult = weatherApi($session.cityData);
                 # переменная для температуры сейчас;
