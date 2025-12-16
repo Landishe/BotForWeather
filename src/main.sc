@@ -47,6 +47,7 @@ theme: /
                             lon: $session.telegaData.eventData.longitude,
                             date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                         }
+                        return $session.cityData
                     } else {
                         
                         $session.cityData = {
@@ -60,6 +61,7 @@ theme: /
                     }
                     $session.DataLocation = test($session.telegaData)
                     log($session.DataLocation)
+                    log('вернулись данные с $session.cityData через телеграмм' + JSON.stringify($session.cityData))
             go!: ./question
         
             state: question
