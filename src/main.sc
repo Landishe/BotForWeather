@@ -30,8 +30,8 @@ theme: /
             q!: [$oneWord] $City * 
             event: telegramSendLocation
             script:
-                    # var $context = $jsapi.context(); 
-                    # var telegaData = $context.request.data;
+                    // var $context = $jsapi.context(); 
+                    //var telegaData = $context.request.data;
                     $session.telegaData = $context.request.data;
                     log('данные из телеграмм пришли');
                     log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
