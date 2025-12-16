@@ -39,14 +39,27 @@ theme: /
                     // Используем город из текста
                 
                     log('тут уже в FindSity ' + JSON.stringify($session.telegaData));
-                
-                    $session.cityData = {
-                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                        lat: $parseTree._City.lat,
-                        lon: $parseTree._City.lon,
-                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                    };
-                    
+                    function test (telegaData){
+                    if(!$session.telegaData){
+                        $session.cityData={
+                            name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                            lat: $session.telegaData.eventData.latitude,
+                            lon: $session.telegaData.eventData.longitude,
+                            date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        }
+                    } else {
+                        
+                        $session.cityData = {
+                            name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                            lat: $parseTree._City.lat,
+                            lon: $parseTree._City.lon,
+                            date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        };
+                    }
+                    return $session.cityData
+                    }
+                    $session.DataLocation = test($session.telegaData)
+                    log($session.DataLocation)
             go!: ./question
         
             state: question
