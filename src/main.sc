@@ -37,7 +37,7 @@ theme: /
                     log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
                     
                     // Используем город из текста
-                    log('тут $session.telegaData должна быть undefined' + $session.telegaData)
+                    log('тут $session.telegaData должна быть undefined' + JSON.stringify($session.telegaData))
                     log('тут уже в FindSity ' + JSON.stringify($session.telegaData));
                     function test (telegaData){
                     if(!$session.telegaData){
