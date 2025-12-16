@@ -27,10 +27,9 @@ theme: /
        
             
         state: findCity
-            event: telegramSendLocation
             q!: [$oneWord] $City * 
-                            
-                script:
+            event: telegramSendLocation
+            script:
                     var $context = $jsapi.context(); 
                     var telegaData = $context.request.data;
                     $session.telegaData = $context.request.data;
