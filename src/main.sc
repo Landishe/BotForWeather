@@ -24,17 +24,20 @@ theme: /
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
             
-        state: telegaLocation
-            script:
-                var test = true
-                if($session.telegaData){
-                  test = false
-                }
+       
             
         state: findCity
+            event: telegramSendLocation
             q!: [$oneWord] $City * 
-            script:
-                // Используем город из текста
+                            
+                script:
+                    var $context = $jsapi.context(); 
+                    var telegaData = $context.request.data;
+                    $session.telegaData = $context.request.data;
+                    log('данные из телеграмм пришли');
+                    log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
+                    
+                    // Используем город из текста
                 
                     log('тут уже в FindSity ' + JSON.stringify($session.telegaData));
                 
