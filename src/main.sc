@@ -37,7 +37,7 @@ theme: /
                     log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
                     
                     // Используем город из текста
-                
+                    log('тут $session.telegaData должна быть undefined' + $session.telegaData)
                     log('тут уже в FindSity ' + JSON.stringify($session.telegaData));
                     function test (telegaData){
                     if(!$session.telegaData){
@@ -47,6 +47,7 @@ theme: /
                             lon: $session.telegaData.eventData.longitude,
                             date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                         }
+                        log('тут прошло')
                         return $session.cityData
                     } else {
                         
