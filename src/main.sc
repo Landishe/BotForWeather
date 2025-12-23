@@ -39,25 +39,24 @@ theme: /
                     // Используем город из текста
                     
                     function findLocation (telegaData){ 
-                    if($session.telegaData.eventData){
-                        $session.cityData={
-                            name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                            lat: $session.telegaData.eventData.latitude,
-                            lon: $session.telegaData.eventData.longitude,
-                            date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                        }
-                        log('тут прошло')
-                        return $session.cityData
-                    } else {
-                        
-                        $session.cityData = {
+                        if($session.telegaData.eventData){
+                            $session.cityData={
+                                name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                                lat: $session.telegaData.eventData.latitude,
+                                lon: $session.telegaData.eventData.longitude,
+                                date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                            }
+                            log('тут прошло')
+                            
+                        } else {
+                            $session.cityData = {
                             name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                             lat: $parseTree._City.lat,
                             lon: $parseTree._City.lon,
                             date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                        };
-                    }
-                    return $session.cityData
+                            };
+                        }
+                        return $session.cityData
                     }
                     $session.DataLocation = findLocation($session.telegaData)
                     log($session.DataLocation)
