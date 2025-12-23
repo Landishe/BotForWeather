@@ -60,7 +60,7 @@ theme: /
                     }
                     $session.DataLocation = findLocation($session.telegaData)
                     log($session.DataLocation)
-                    log('вернулись данные с $session.cityData через телеграмм' + JSON.stringify($session.cityData))
+                    log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
             go!: ./question
         
             state: question
