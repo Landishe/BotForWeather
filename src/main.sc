@@ -34,7 +34,7 @@ theme: /
                     //var telegaData = $context.request.data;
                     $session.telegaData = $context.request.data;
                     log('данные из телеграмм пришли');
-                    log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
+                    log("данные из $session.telegaData = " + JSON.stringify($session.telegaData.eventData));
                     
                     // Используем город из текста
                     
@@ -61,6 +61,7 @@ theme: /
                     $session.DataLocation = findLocation($session.telegaData)
                     log($session.DataLocation)
                     log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
+                    
             go!: ./question
         
             state: question
