@@ -43,7 +43,6 @@ theme: /
                             $session.cityData={
                                 lat: $session.telegaData.eventData.latitude,
                                 lon: $session.telegaData.eventData.longitude,
-                                date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                             }
                             log('тут прошло')
                             
