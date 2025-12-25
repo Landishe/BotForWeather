@@ -41,7 +41,6 @@ theme: /
                     function findLocation (telegaData){ 
                         if($session.telegaData.eventData){
                             $session.cityData={
-                                name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                                 lat: $session.telegaData.eventData.latitude,
                                 lon: $session.telegaData.eventData.longitude,
                                 date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
