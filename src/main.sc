@@ -29,46 +29,36 @@ theme: /
         state: findCity
             q!: [$oneWord] $City * 
             event: telegramSendLocation
-            script:
-                    // var $context = $jsapi.context(); 
-                    //var telegaData = $context.request.data;
-                    $session.telegaData = $context.request.data;
-                    log('данные из телеграмм пришли');
-                    log("данные из $session.telegaData = " + JSON.stringify($session.telegaData.eventData));
+            script: $session.telegaData = $context.request.data;
                     
                     // Используем город из текста
                     
-                    function findLocation (telegaData){ 
-                        if($session.telegaData.eventData){
-                            $session.cityData={
-                                lat: $session.telegaData.eventData.latitude,
-                                lon: $session.telegaData.eventData.longitude,
-                            }
-                            log('тут прошло')
-                            
-                        } else {
-                            $session.cityData = {
-                            name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                            lat: $parseTree._City.lat,
-                            lon: $parseTree._City.lon,
-                            date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                            };
+                function findLocation (telegaData){ 
+                    if($session.telegaData.eventData){
+                        $session.cityData={
+                            lat: $session.telegaData.eventData.latitude,
+                            lon: $session.telegaData.eventData.longitude,
                         }
-                        return $session.cityData
+                        log('тут прошло')
+                        
+                    } else {
+                        $session.cityData = {
+                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                        lat: $parseTree._City.lat,
+                        lon: $parseTree._City.lon,
+                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        };
                     }
-                    $session.DataLocation = findLocation($session.telegaData)
-                    log($session.DataLocation)
-                    log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
-                    
+                    return $session.cityData
+                }
+                $session.DataLocation = findLocation($session.telegaData)
+                log($session.DataLocation)
+                log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
+                
             go!: ./question
         
             state: question
                 a: Вы хотите узнать погоду на сейчас, сегодня или на неделю?
-                script: 
-                    if($session.telegaData){
-                    log('тут уже в FindSity ' + JSON.stringify($session.telegaData))
-                    };
-                    $session.weatherResult1 = weatherApi($session.cityData);
         
         state: ask
             q!: $regexp_i<(?:на\s+)?(сейчас)>
@@ -84,7 +74,7 @@ theme: /
             
         state: weatherCurrent
             script:
-                log("здесь данные с $session.weatherResult" + JSON.stringify($session.weatherResult1));
+                
                 # JSON для работы с данными на сейчас
                 $session.weatherResult = weatherApi($session.cityData);
                 # переменная для температуры сейчас;
@@ -169,14 +159,14 @@ theme: /
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
-    state: geolocation
-        event: telegramSendLocation
-        script:
-            var $context = $jsapi.context(); 
-            var telegaData = $context.request.data;
-            $session.telegaData = $context.request.data;
-            log('данные из телеграмм пришли');
-            log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
+    # state: geolocation
+    #     event: telegramSendLocation
+    #     script:
+    #         var $context = $jsapi.context(); 
+    #         var telegaData = $context.request.data;
+    #         $session.telegaData = $context.request.data;
+    #         log('данные из телеграмм пришли');
+    #         log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
             
     state: NoMatch
         event!: noMatch
