@@ -30,7 +30,7 @@ theme: /
             q!: [$oneWord] $City * 
             event: telegramSendLocation
             script: $session.telegaData = $context.request.data;
-                    
+                    log($context.request.data)
                     // Используем город из текста
                     
                 function findLocation (telegaData){ 
@@ -39,7 +39,7 @@ theme: /
                             lat: $session.telegaData.eventData.latitude,
                             lon: $session.telegaData.eventData.longitude,
                         }
-                        log('тут прошло')
+                        
                         
                     } else {
                         $session.cityData = {
@@ -74,7 +74,6 @@ theme: /
             
         state: weatherCurrent
             script:
-                
                 # JSON для работы с данными на сейчас
                 $session.weatherResult = weatherApi($session.cityData);
                 # переменная для температуры сейчас;
@@ -89,12 +88,14 @@ theme: /
                 $session.timeSunrise = $session.weatherResult.data.daily.sunrise[0];
                 $session.timeSunset = $session.weatherResult.data.daily.sunset[0];
                 # переменные для функций : температура сейчас, код погоды и рекомендация по одежде, скорость ветра, восхода и заката солнца
-                $temp.tempData = getTemperature($session.temperature); //вот тут и ниже правильно
+                $temp.tempData = getTemperature($session.temperature); 
                 $temp.weatherCode = getWeatherCode($session.weatherCode);
                 $temp.clothesRecomendation = getClothingRecomendation($session.temperature, $session.weatherCode);
                 $temp.windSpeed = getWindSpeed($session.windSpeed);
                 $temp.timeSunsetOrSunrise = convertToLocalTime($session.timeSunrise, $session.timeSunset)
-                
+                # $session.formatTime = formatTime($session.weatherResult.data.current.time)
+                # log($temp.formatTime)
+                log($session.cityData.date)
                 
             if: $session.weatherResult.isOk
                 if: (($session.cityData.date <= $temp.timeSunsetOrSunrise[0]) || ($session.cityData.date >= $temp.timeSunsetOrSunrise[1]))
@@ -103,7 +104,7 @@ theme: /
                     a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.weatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
                     a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
             else:
-                a: У меня не получилось узнать погоду. Попробуйте ещё раз.    
+                a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
         state: weatherOnDay
             script:
@@ -159,15 +160,7 @@ theme: /
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.
         
-    # state: geolocation
-    #     event: telegramSendLocation
-    #     script:
-    #         var $context = $jsapi.context(); 
-    #         var telegaData = $context.request.data;
-    #         $session.telegaData = $context.request.data;
-    #         log('данные из телеграмм пришли');
-    #         log("данные из $session.telegaData = " + JSON.stringify($session.telegaData));
-            
+   
     state: NoMatch
         event!: noMatch
         a: Я не понял что вы сказали, повторите

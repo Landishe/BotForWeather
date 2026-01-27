@@ -218,3 +218,11 @@ function getRangeAdvice(weatherResult) {
         return "📊 Температура будет стабильной в течение недели";
     }
 }
+
+// формула для форматировании времени в JSON
+
+// function formatTime(currentTime){
+//     var timePart = currentTime.split('T')[1];
+//     log("сейчас " + timePart)
+//     return timePart.substring(0, 5); 
+// }
