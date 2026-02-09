@@ -52,7 +52,7 @@ theme: /
                     return $session.cityData
                 }
                 $session.DataLocation = findLocation($session.telegaData)
-                log($session.DataLocation)
+                log($session.cityData.date)
                 log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
                 
             go!: ./question
@@ -92,13 +92,13 @@ theme: /
                 $temp.weatherCode = getWeatherCode($session.weatherCode);
                 $temp.clothesRecomendation = getClothingRecomendation($session.temperature, $session.weatherCode);
                 $temp.windSpeed = getWindSpeed($session.windSpeed);
-                $temp.timeSunsetOrSunrise = convertToLocalTime($session.timeSunrise, $session.timeSunset)
-                # $session.formatTime = formatTime($session.weatherResult.data.current.time)
-                # log($temp.formatTime)
-                log($session.cityData.date)
+                $temp.timeSunset = convertSunset($session.timeSunset);
+                $session.timeSurise = convertSunrise($session.timeSunrise);
+                
+               
                 
             if: $session.weatherResult.isOk
-                if: (($session.cityData.date <= $temp.timeSunsetOrSunrise[0]) || ($session.cityData.date >= $temp.timeSunsetOrSunrise[1]))
+                if: (($session.cityData.date < $session.timeSurise) || ($session.cityData.date > $temp.timeSunset))
                     a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Ощущается как: "{{$temp.tempData}}"
                 else:
                     a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.weatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.

@@ -1,9 +1,7 @@
 <test integration="false">
-    <test-case id="weatherNow - night">
-        <q state="/start">/start</q>
-        <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
-        <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
-        
+    
+    <test-case id="weatherNow - day">
+        <dateTime>2026-02-02 15:30:00</dateTime>
         <mockData>
             <query method="get">https://api.open-meteo.com/v1/forecast?latitude=${latitude}&amp;longitude=${longitude}&amp;timezone=${timezone}&amp;current=${current}&amp;daily=${daily}</query>
             <parameters>
@@ -18,7 +16,7 @@
                     "latitude": 55.75,
                     "longitude": 37.625,
                     "current": {
-                        
+                        "time": "2026-02-02T15:30",
                         "temperature_2m": -12.3,
                         "weather_code": 45,
                         "wind_speed_10m": 5.2
@@ -27,38 +25,30 @@
                         "temperature_2m_max": [8.7],
                         "weather_code": [3],
                         "wind_speed_10m_max": [2.3],
-                        "sunrise": ["2025-11-05T07:44"],
-                        "sunset": ["2025-11-05T16:41"]
+                        "sunrise": ["2026-02-02T07:44"],
+                        "sunset": ["2026-02-02T16:41"]
                     }
                 }
             </response>
         </mockData>
-        
+        <q state="/start">/start</q>
+        <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
+        <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
         <q>москва</q>
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
         <q>сейчас</q>
-        <dateTime>2026-01-23 00:01:00</dateTime>
-        <!--<context var="session">-->
-        <!--    {-->
-        <!--        "cityData.date": "00:00"-->
-        <!--    }-->
-        <!--</context>-->
-        <a state="/start/weatherCurrent">Сейчас в городе Москве -12.3 °C. Ожидается до 8.7°C. Ощущается как: "очень холодно"</a>
+        <a state="/start/weatherCurrent">Сейчас в городе Москве -12.3 °C. Ожидается до 8.7°C. Сейчас в городе очень холодно и неизвестно Сила ветра 1.4м/с.</a>
+        <a state="/start/weatherCurrent">Вот что может пригодиться сейчас: зонт или дождевик</a>
     </test-case>
 
 
-    <test-case id="weatherNow - day">
-        <q state="/start">/start</q>
-        <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
-        <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
-        
+    <test-case id="weatherNow - night">
+        <dateTime>2026-02-02 21:30:00</dateTime>
         <mockData>
-            <!-- URL должен ТОЧНО совпадать с api.js -->
             <query method="get">https://api.open-meteo.com/v1/forecast?latitude=${latitude}&amp;longitude=${longitude}&amp;timezone=${timezone}&amp;current=${current}&amp;daily=${daily}</query>
             <parameters>
                 <latitude>55.75222</latitude>
                 <longitude>37.61556</longitude>
-                <!-- Все параметры как в коде -->
                 <current>temperature_2m,weather_code,wind_speed_10m</current>
                 <timezone>auto</timezone>
                 <daily>temperature_2m_max,weather_code,wind_speed_10m_max,sunset,sunrise</daily>
@@ -68,6 +58,7 @@
                     "latitude": 55.75,
                     "longitude": 37.625,
                     "current": {
+                        "time": "2026-02-02T15:30",
                         "temperature_2m": -12.3,
                         "weather_code": 45,
                         "wind_speed_10m": 5.2
@@ -76,23 +67,20 @@
                         "temperature_2m_max": [8.7],
                         "weather_code": [3],
                         "wind_speed_10m_max": [2.3],
-                        "sunrise": ["2025-11-05T07:44"],
-                        "sunset": ["2025-11-05T16:41"]
+                        "sunrise": ["2026-02-02T07:44"],
+                        "sunset": ["2026-02-02T16:41"]
                     }
                 }
             </response>
         </mockData>
-        
+        <q state="/start">/start</q>
+        <a>** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Добавлено обновление вывода погоды на "сейчас"** Добрый день! Я могу подсказать прогноз погоды в вашем городе.</a>
+        <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
         <q>москва</q>
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
         <q>сейчас</q>
-        <context var="session">
-            {
-                "cityData.date": "12:00"
-            }
-        </context>
-        <a state="/start/weatherCurrent">Сейчас в городе Москве -12.3 °C. Ожидается до 8.7°C. Сейчас в городе очень холодно и неизвестно Сила ветра 1.4м/с.</a>
-        <a state="/start/weatherCurrent">Вот что может пригодиться сейчас: зонт или дождевик</a>
+        <a state="/start/weatherCurrent">Сейчас в городе Москве -12.3 °C. Ожидается до 8.7°C. Ощущается как: "очень холодно"</a>
+        
     </test-case>
 </test>
 

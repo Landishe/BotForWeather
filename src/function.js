@@ -23,11 +23,21 @@ function getWindSpeed (windSpeed) {
 }
 
 // Определение восхода и заката солнца 
-function convertToLocalTime(timeSunrise, timeSunset){
-    var timeSunsetSunshine = []
-    timeSunsetSunshine.push(timeSunrise.split('T')[1])
-    timeSunsetSunshine.push(timeSunset.split('T')[1])
-    return timeSunsetSunshine
+// function convertToLocalTime(timeSunrise, timeSunset){
+//     var timeSunsetSunshine = []
+//     timeSunsetSunshine.push(timeSunrise.split('T')[1])
+//     timeSunsetSunshine.push(timeSunset.split('T')[1])
+//     return timeSunsetSunshine
+// }
+
+function convertSunset(timeSunset){
+    return timeSunset.split('T')[1]
+}
+
+function convertSunrise(timeSunrise){
+    return timeSunrise.split('T')[1]
+    
+    
 }
 
 // рекомендация какую одежду одеть сегодня
@@ -219,10 +229,3 @@ function getRangeAdvice(weatherResult) {
     }
 }
 
-// формула для форматировании времени в JSON
-
-// function formatTime(currentTime){
-//     var timePart = currentTime.split('T')[1];
-//     log("сейчас " + timePart)
-//     return timePart.substring(0, 5); 
-// }
