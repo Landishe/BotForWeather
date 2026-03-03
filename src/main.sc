@@ -30,7 +30,6 @@ theme: /
             q!: [$oneWord] $City * 
             event: telegramSendLocation
             script: $session.telegaData = $context.request.data;
-                    log($context.request.data)
                     // Используем город из текста
                     
                 function findLocation (telegaData){ 
@@ -46,14 +45,14 @@ theme: /
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
                         lat: $parseTree._City.lat,
                         lon: $parseTree._City.lon,
-                        date: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                        time: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
                         };
                     }
                     return $session.cityData
                 }
                 $session.DataLocation = findLocation($session.telegaData)
-                log($session.cityData.date)
-                log('вернулись данные с $session.DataLocation через телеграмм' + JSON.stringify($session.DataLocation))
+                
+                
                 
             go!: ./question
         
@@ -87,6 +86,9 @@ theme: /
                 # переменная для восхода и заката
                 $session.timeSunrise = $session.weatherResult.data.daily.sunrise[0];
                 $session.timeSunset = $session.weatherResult.data.daily.sunset[0];
+                $session.currentTime = $session.cityData.time;
+                
+                
                 # переменные для функций : температура сейчас, код погоды и рекомендация по одежде, скорость ветра, восхода и заката солнца
                 $temp.tempData = getTemperature($session.temperature); 
                 $temp.weatherCode = getWeatherCode($session.weatherCode);
@@ -95,13 +97,17 @@ theme: /
                 $temp.timeSunset = convertSunset($session.timeSunset);
                 $session.timeSurise = convertSunrise($session.timeSunrise);
                 
-               
+                # конвертация времени в милисекунды
+                $temp.sunsetMinutes = convertToMinutes($temp.timeSunset);    
+                $temp.sunriseMinutes = convertToMinutes($session.timeSurise);
+                $session.currentMinutes = convertToMinutes($session.currentTime);
+                
                 
             if: $session.weatherResult.isOk
-                if: (($session.cityData.date < $session.timeSurise) || ($session.cityData.date > $temp.timeSunset))
+                if: (($session.currentMinutes < $temp.sunriseMinutes) || ($session.currentMinutes > $temp.sunsetMinutes))
                     a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Ощущается как: "{{$temp.tempData}}"
                 else:
-                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.weatherCode}} Сила ветра {{$temp.windSpeed + 'м/с'}}.
+                    a: Сейчас в городе {{$session.cityData.name}} {{$session.temperature}} °C. Ожидается до {{$session.temperatureDay}}°C. Сейчас в городе {{$temp.tempData}} и {{$temp.weatherCode}}. Сила ветра {{$temp.windSpeed + 'м/с'}}.
                     a: Вот что может пригодиться сейчас: {{$temp.clothesRecomendation.join(', ')}}
             else:
                 a: У меня не получилось узнать погоду. Попробуйте ещё раз.

@@ -22,23 +22,22 @@ function getWindSpeed (windSpeed) {
     return (windSpeed/3.6).toFixed(1)
 }
 
-// Определение восхода и заката солнца 
-// function convertToLocalTime(timeSunrise, timeSunset){
-//     var timeSunsetSunshine = []
-//     timeSunsetSunshine.push(timeSunrise.split('T')[1])
-//     timeSunsetSunshine.push(timeSunset.split('T')[1])
-//     return timeSunsetSunshine
-// }
+
+
 
 function convertSunset(timeSunset){
     return timeSunset.split('T')[1]
-}
+};
 
 function convertSunrise(timeSunrise){
     return timeSunrise.split('T')[1]
-    
-    
-}
+};
+
+function convertToMinutes(timeStr) {
+    var parts = timeStr.split(':');
+    return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+};
+
 
 // рекомендация какую одежду одеть сегодня
 function getClothesWeatherOnDay(weatherCodeToday, temperatureToday){
@@ -65,7 +64,7 @@ function getClothesWeatherOnDay(weatherCodeToday, temperatureToday){
 
 // Определение какое погодное условие сейчас
 function getWeatherCode(weatherCode){
-    switch(weatherCode[0]) {
+    switch(weatherCode) {
         case 0: return 'ясно☀️';
         case 1: return 'преимущественно ясно🌤';
         case 2: return 'переменная облачность⛅️';
@@ -117,10 +116,10 @@ function getClothingRecomendation(temperature, weatherCode){
 
     if (weatherCode == 0 || weatherCode == 1){
         recommendation.push("солнечные очки")
-    } else if (weatherCode >= 57 || weatherCode <= 67){
+    } else if ((weatherCode >= 57 || weatherCode <= 67) && (temperature >= 0 || temperature >= 30)){
         recommendation.push('зонт или дождевик')
-    } else if (weatherCode >= 71 || weatherCode <= 86){
-        recommendation.push('зонт и теплую обувь')
+    } else if ((weatherCode >= 71 || weatherCode <= 86) || (temperature <= 0 || temperature >= -30)){
+        recommendation.push('теплую одежду и теплую обувь')
     } else if (weatherCode >= 95 || weatherCode <= 99){
         recommendation.push('Не выходить на улицу пока идет гроза')
     }
