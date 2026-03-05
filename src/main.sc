@@ -142,7 +142,6 @@ theme: /
             script:
                 $temp.weatherResultWeek = weatherApi($session.cityData);
                 
-                log($temp.weatherResult);
                 # Переменная для сводки погоды на неделю
                 $temp.weekTemperature = $temp.weatherResultWeek.data.daily.temperature_2m_max;
                 # Переменная для массива дат

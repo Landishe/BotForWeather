@@ -119,7 +119,7 @@ function getClothingRecomendation(temperature, weatherCode){
     } else if ((weatherCode >= 57 || weatherCode <= 67) && (temperature >= 0 || temperature >= 30)){
         recommendation.push('зонт или дождевик')
     } else if ((weatherCode >= 71 || weatherCode <= 86) || (temperature <= 0 || temperature >= -30)){
-        recommendation.push('теплую одежду и теплую обувь')
+        recommendation.push('теплая одежда и теплая обувь')
     } else if (weatherCode >= 95 || weatherCode <= 99){
         recommendation.push('Не выходить на улицу пока идет гроза')
     }
