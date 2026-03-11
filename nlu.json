@@ -21,7 +21,7 @@
     }
   },
   "intents" : [ {
-    "path" : "/Недельная погода",
+    "path" : "/AskOtherDays",
     "answer" : "я не могу к сожалению показать погоду на три дня, показать на неделю?",
     "enabled" : true,
     "shared" : false,

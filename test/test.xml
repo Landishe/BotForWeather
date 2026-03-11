@@ -134,9 +134,13 @@
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
         <q>три</q>
         <a>Я могу показать погоду только на сейчас, сегодня или на неделю. Показать прогноз на неделю в Москве?</a>
-        <responseData field="replies[0].buttons[1].text">"✅ Да, покажи"</responseData>
-        <responseData field="replies[1].buttons[1].text">"↩️ Нет, выбрать период"</responseData>
-        <responseData field="replies[2].buttons[1].text">"🔄 Другой город"</responseData>
+        <responseData field="replies[1].buttons">
+            [
+                {"text":"✅ Да, покажи","transition":"/start/weatherOnWeek"},
+                {"text":"↩️ Нет, выбрать период","transition":"/start/findCity/question"},
+                {"text":"🔄 Другой город","transition":"/start/whereAreYou"}
+            ]
+    </responseData>
     </test-case>
 
     <test-case id="weatherToWeek" >

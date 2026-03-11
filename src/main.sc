@@ -63,10 +63,10 @@ theme: /
                     go!: /start/weatherOnWeek
                 
                 state: ask3
-                    intent:/Недельная погода
-                    go!: askThreeDays
+                    intent:/AskOtherDays
+                    go!: AskOtherDays
                 
-                state: askThreeDays
+                state: AskOtherDays
                     event: noMatch
                     q: *
                     script: 
