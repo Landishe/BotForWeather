@@ -52,10 +52,10 @@ function getClothesWeatherOnDay(weatherCodeToday, temperatureToday){
 
     if (weatherCodeToday == 0 || weatherCodeToday == 1){
         recomendationClothes.push("• ☔ Возьмите зонт или дождевики")
-    } else if (weatherCodeToday >= 57 || weatherCodeToday <= 67){
+    } else if ((weatherCodeToday >= 51 && weatherCodeToday <= 67) || (temperatureToday >= -5 && temperatureToday <= 5)){
         recomendationClothes.push('• ☔ Возьмите зонт или дождевик')
     } else if (weatherCodeToday >= 71 || weatherCodeToday <= 86){
-        recomendationClothes.push('• 👢 Непромокаемая обувь будет кстати')
+        recomendationClothes.push('• 👢 теплпая обувь будет кстати')
     } else if (weatherCodeToday >= 95 || weatherCodeToday <= 99){
         recomendationClothes.push('• ⛈️ Избегайте открытых мест во время грозыза')
     }

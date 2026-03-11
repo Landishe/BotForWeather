@@ -11,23 +11,18 @@ require: dateTime/moment.min.js
     module = sys.zb-common
 
 theme: /
-# стейты называются с заглавной буквы
     state: start
         q!: $regex<start>
         script: 
         a: ** От разработчика: Бот находится в стадии разработки и могут быть ошбки. Бот разбирает сокращенные название городов например: СПБ, МСК Екб и тп. Бот начал распозновать геолокацию которую можно отправить через функцию Telegram **
-            \n Добрый день! Я могу подсказать прогноз погоды в вашем городе.
+            \nДобрый день! Я могу подсказать прогноз погоды в вашем городе.
         go!: ./whereAreYou
         
-        
-                    
         state: whereAreYou
             a: Уточните в каком городе посмотреть погоду?
             
-       
-            
         state: findCity
-            q!: [$oneWord] $City * 
+            q!: * [$oneWord] $City * 
             event: telegramSendLocation
             script: $session.telegaData = $context.request.data;
                     // Используем город из текста
@@ -38,8 +33,6 @@ theme: /
                             lat: $session.telegaData.eventData.latitude,
                             lon: $session.telegaData.eventData.longitude,
                         }
-                        
-                        
                     } else {
                         $session.cityData = {
                         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
@@ -52,25 +45,46 @@ theme: /
                 }
                 $session.DataLocation = findLocation($session.telegaData)
                 
-                
-                
             go!: ./question
         
-            state: question
+            state: question || modal = true
                 a: Вы хотите узнать погоду на сейчас, сегодня или на неделю?
         
-        state: ask
-            q!: $regexp_i<(?:на\s+)?(сейчас)>
-            go!: ../weatherCurrent
+                state: ask
+                    q: $regexp_i<(?:на\s+)?(сейчас)>
+                    go!: /start/weatherCurrent
+                
+                state: ask1    
+                    q: $regexp_i<(?:на\s+)?(сегодня)>
+                    go!: /start/weatherOnDay
+                    
+                state: ask2
+                    q: $regexp_i<(?:на\s+)?(недел[яею])>
+                    go!: /start/weatherOnWeek
+                
+                state: ask3
+                    intent:/Недельная погода
+                    go!: askThreeDays
+                
+                state: askThreeDays
+                    event: noMatch
+                    q: *
+                    script: 
+                        $session.originalRequest = $request.query;
+                        $session.cityForForecast = $session.cityData.name;
+                        
+                        $reactions.answer(
+                            "Я могу показать погоду только на сейчас, сегодня или на неделю. " +
+                            "Показать прогноз на неделю в " + $session.cityData.name + "?"
+                            );
+                            
+                        $reactions.buttons([
+                            { text: "✅ Да, покажи", transition: "../../../weatherOnWeek" }, 
+                            { text: "↩️ Нет, выбрать период", transition: "../../question" }, 
+                            { text: "🔄 Другой город", transition: "../../../whereAreYou"}
+                            ])
+                    
         
-        state: ask1    
-            q!: $regexp_i<(?:на\s+)?(сегодня)>
-            go!: ../weatherOnDay
-            
-        state: ask2
-            q!: $regexp_i<(?:на\s+)?(недел[яею])>
-            go!: ../weatherOnWeek
-            
         state: weatherCurrent
             script:
                 # JSON для работы с данными на сейчас
@@ -87,7 +101,6 @@ theme: /
                 $session.timeSunrise = $session.weatherResult.data.daily.sunrise[0];
                 $session.timeSunset = $session.weatherResult.data.daily.sunset[0];
                 $session.currentTime = $session.cityData.time;
-                
                 
                 # переменные для функций : температура сейчас, код погоды и рекомендация по одежде, скорость ветра, восхода и заката солнца
                 $temp.tempData = getTemperature($session.temperature); 
