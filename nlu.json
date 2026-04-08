@@ -30,10 +30,6 @@
     }, {
       "text" : "через несколько дней"
     }, {
-      "text" : "через три дня"
-    }, {
-      "text" : "через три дня"
-    }, {
       "text" : "на будние дни"
     }, {
       "text" : "на выходные"
@@ -41,6 +37,44 @@
       "text" : "какая погода будет через пару дней"
     }, {
       "text" : "прогноз на несколько дней"
+    }, {
+      "text" : "пять дней"
+    }, {
+      "text" : "через день"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "priority" : 0
+  }, {
+    "path" : "/WhereYou",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "подскажи погоду в городе"
+    }, {
+      "text" : "вот где я"
+    }, {
+      "text" : "прогноз для Соче"
+    }, {
+      "text" : "определи мою геопозицию"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "priority" : 0
+  }, {
+    "path" : "/sevenDay",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Семь дней"
+    }, {
+      "text" : "неделя"
+    }, {
+      "text" : "на эту неделю"
     } ],
     "classificationRules" : {
       "refs" : [ ]

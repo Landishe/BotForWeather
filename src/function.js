@@ -1,3 +1,21 @@
+// function findLocation (telegaData, cityData){ 
+//     if(telegaData.eventData){
+//         $session.cityData={
+//             lat: telegaData.eventData.latitude,
+//             lon: telegaData.eventData.longitude,
+//         }
+//     } else {
+//         cityData = {
+//         name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+//         lat: $parseTree._City.lat,
+//         lon: $parseTree._City.lon,
+//         time: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+//         };
+//     }
+//     log($session.cityData.name);
+//     return $session.cityData
+// }
+
 // определение ощущения температуры
 function getTemperature(temperature){
     if (temperature >= 30) {

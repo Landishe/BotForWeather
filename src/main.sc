@@ -19,37 +19,47 @@ theme: /
         go!: ./whereAreYou
         
         state: whereAreYou
+            intent: /WhereYou
             a: Уточните в каком городе посмотреть погоду?
             
         state: findCity
+            
             q!: * [$oneWord] $City * 
             event: telegramSendLocation
-            script: $session.telegaData = $context.request.data;
-                    // Используем город из текста
-                    
-                function findLocation (telegaData){ 
-                    if($session.telegaData.eventData){
-                        $session.cityData={
-                            lat: $session.telegaData.eventData.latitude,
-                            lon: $session.telegaData.eventData.longitude,
+            script: 
+                    $session.telegaData = $context.request.data;
+                    $session.DataLocation = findLocation($session.telegaData)
+                    function findLocation (telegaData){ 
+                        if($session.telegaData.eventData){
+                            $session.cityData={
+                                lat: $session.telegaData.eventData.latitude,
+                                lon: $session.telegaData.eventData.longitude,
+                            }
+                        } else {
+                            $session.cityData = {
+                            name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
+                            lat: $parseTree._City.lat,
+                            lon: $parseTree._City.lon,
+                            time: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
+                            };
                         }
-                    } else {
-                        $session.cityData = {
-                        name: capitalize($caila.inflect($parseTree._City.name, ["loct"])),
-                        lat: $parseTree._City.lat,
-                        lon: $parseTree._City.lon,
-                        time: $jsapi.dateForZone($parseTree._City.timezone, "HH:mm"),
-                        };
+                        log($session.cityData);
+                        return $session.cityData
                     }
-                    return $session.cityData
-                }
-                $session.DataLocation = findLocation($session.telegaData)
                 
             go!: ./question
-        
+                
             state: question || modal = true
+                
                 a: Вы хотите узнать погоду на сейчас, сегодня или на неделю?
-        
+                
+                script:
+                    $reactions.buttons([
+                                { text: "Cегодня", transition: "../../weatherCurrent" }, 
+                                { text: "Сейчас", transition: "../../weatherOnDay" }, 
+                                { text: "Неделя", transition: "../../weatherOnWeek"}
+                                ])
+                                
                 state: ask
                     q: $regexp_i<(?:на\s+)?(сейчас)>
                     go!: /start/weatherCurrent
@@ -59,31 +69,32 @@ theme: /
                     go!: /start/weatherOnDay
                     
                 state: ask2
+                    intent!: /sevenDay
                     q: $regexp_i<(?:на\s+)?(недел[яею])>
                     go!: /start/weatherOnWeek
+                
+               
                 
                 state: ask3
                     intent:/AskOtherDays
                     go!: AskOtherDays
                 
-                state: AskOtherDays
-                    event: noMatch
-                    q: *
-                    script: 
-                        $session.originalRequest = $request.query;
-                        $session.cityForForecast = $session.cityData.name;
-                        
-                        $reactions.answer(
-                            "Я могу показать погоду только на сейчас, сегодня или на неделю. " +
-                            "Показать прогноз на неделю в " + $session.cityData.name + "?"
-                            );
+                    state: AskOtherDays
+                        event: noMatch
+                        script: 
+                            $session.originalRequest = $request.query;
                             
-                        $reactions.buttons([
-                            { text: "✅ Да, покажи", transition: "../../../weatherOnWeek" }, 
-                            { text: "↩️ Нет, выбрать период", transition: "../../question" }, 
-                            { text: "🔄 Другой город", transition: "../../../whereAreYou"}
-                            ])
-                    
+                            $reactions.answer(
+                                "Я могу показать погоду только на сейчас, сегодня или на неделю. " +
+                                "Показать прогноз на неделю в " + $session.cityData.name + "?"
+                                );
+                                
+                            $reactions.buttons([
+                                { text: "✅ Да, покажи", transition: "../../../../weatherOnWeek" }, 
+                                { text: "↩️ Нет, выбрать период", transition: "../../../question" }, 
+                                { text: "🔄 Другой город", transition: "../../../../whereAreYou"}
+                                ])
+                            log($session.originalRequest)
         
         state: weatherCurrent
             script:
@@ -181,4 +192,4 @@ theme: /
    
     state: NoMatch
         event!: noMatch
-        a: Я не понял что вы сказали, повторите
+        a: Простите но я не знаю ваш город или населенный пункт, отправьте геопозицию и я смогу подсказать погоду
