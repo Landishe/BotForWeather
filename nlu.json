@@ -41,38 +41,14 @@
       "text" : "пять дней"
     }, {
       "text" : "через день"
-    } ],
-    "classificationRules" : {
-      "refs" : [ ]
-    },
-    "patterns" : [ ],
-    "priority" : 0
-  }, {
-    "path" : "/WhereYou",
-    "enabled" : true,
-    "shared" : false,
-    "phrases" : [ {
-      "text" : "подскажи погоду в городе"
     }, {
-      "text" : "вот где я"
+      "text" : "завтра"
     }, {
-      "text" : "прогноз для Соче"
+      "text" : "какая погода будет завтра"
     }, {
-      "text" : "определи мою геопозицию"
-    } ],
-    "classificationRules" : {
-      "refs" : [ ]
-    },
-    "patterns" : [ ],
-    "priority" : 0
-  }, {
-    "path" : "/sevenDay",
-    "enabled" : true,
-    "shared" : false,
-    "phrases" : [ {
+      "text" : "какая погода будет послезавтра"
+    }, {
       "text" : "Семь дней"
-    }, {
-      "text" : "неделя"
     }, {
       "text" : "на эту неделю"
     } ],

@@ -57,7 +57,8 @@ theme: /
                     $reactions.buttons([
                                 { text: "Cегодня", transition: "../../weatherCurrent" }, 
                                 { text: "Сейчас", transition: "../../weatherOnDay" }, 
-                                { text: "Неделя", transition: "../../weatherOnWeek"}
+                                { text: "Неделя", transition: "../../weatherOnWeek"},
+                                { text: "🔄 Другой город", transition: "/start/whereAreYou"}
                                 ])
                                 
                 state: ask
@@ -72,8 +73,6 @@ theme: /
                     intent!: /sevenDay
                     q: $regexp_i<(?:на\s+)?(недел[яею])>
                     go!: /start/weatherOnWeek
-                
-               
                 
                 state: ask3
                     intent:/AskOtherDays
@@ -92,7 +91,7 @@ theme: /
                             $reactions.buttons([
                                 { text: "✅ Да, покажи", transition: "../../../../weatherOnWeek" }, 
                                 { text: "↩️ Нет, выбрать период", transition: "../../../question" }, 
-                                { text: "🔄 Другой город", transition: "../../../../whereAreYou"}
+                                { text: "🔄 Другой город", transition: "../../../../../whereAreYou"}
                                 ])
                             log($session.originalRequest)
         
