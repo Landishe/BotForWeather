@@ -55,8 +55,8 @@ theme: /
                 
                 script:
                     $reactions.buttons([
-                                { text: "Cегодня", transition: "../../weatherOnDay" }, 
                                 { text: "Сейчас", transition: "../../weatherCurrent" }, 
+                                { text: "Cегодня", transition: "../../weatherOnDay" }, 
                                 { text: "Неделя", transition: "../../weatherOnWeek"},
                                 { text: "🔄 Другой город", transition: "/start/whereAreYou"}
                                 ])
@@ -137,7 +137,6 @@ theme: /
         
         state: weatherOnDay
             script:
-                log("Здесь переменная из weatherCurrent " + $session.weatherResult)
                 # переменная для json для работы с данными на сегодня
                 $temp.weatherResult = weatherApi($session.cityData);
                 # Переменная для скорости ветра
