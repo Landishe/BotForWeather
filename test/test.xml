@@ -36,7 +36,6 @@
         <a state="/start/whereAreYou">Уточните в каком городе посмотреть погоду?</a>
         <q>москва</q>
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
-        
         <responseData field="replies[0].buttons">
             [
                 {"text":"Cегодня","transition":"/start/weatherOnDay"},
