@@ -55,8 +55,8 @@ theme: /
                 
                 script:
                     $reactions.buttons([
-                                { text: "Cегодня", transition: "../../weatherCurrent" }, 
-                                { text: "Сейчас", transition: "../../weatherOnDay" }, 
+                                { text: "Cегодня", transition: "../../weatherOnDay" }, 
+                                { text: "Сейчас", transition: "../../weatherCurrent" }, 
                                 { text: "Неделя", transition: "../../weatherOnWeek"},
                                 { text: "🔄 Другой город", transition: "/start/whereAreYou"}
                                 ])
@@ -124,7 +124,7 @@ theme: /
                 $temp.sunsetMinutes = convertToMinutes($temp.timeSunset);    
                 $temp.sunriseMinutes = convertToMinutes($session.timeSurise);
                 $session.currentMinutes = convertToMinutes($session.currentTime);
-                
+                log("now")
                 
             if: $session.weatherResult.isOk
                 if: (($session.currentMinutes < $temp.sunriseMinutes) || ($session.currentMinutes > $temp.sunsetMinutes))
