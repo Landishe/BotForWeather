@@ -51,6 +51,8 @@
       "text" : "Семь дней"
     }, {
       "text" : "на эту неделю"
+    }, {
+      "text" : "три"
     } ],
     "classificationRules" : {
       "refs" : [ ]
