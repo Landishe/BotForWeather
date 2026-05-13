@@ -38,8 +38,8 @@
         <a state="/start/findCity/question">Вы хотите узнать погоду на сейчас, сегодня или на неделю?</a>
         <responseData field="replies[0].buttons">
             [
-                {"text":"Cегодня","transition":"/start/weatherOnDay"},
                 {"text":"Сейчас","transition":"/start/weatherCurrent"},
+                {"text":"Cегодня","transition":"/start/weatherOnDay"},
                 {"text":"Неделя","transition":"/start/weatherOnWeek"},
                 {"text":"🔄 Другой город","transition":"/start/whereAreYou"}
             ]
